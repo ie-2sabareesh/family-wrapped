@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -215,6 +215,14 @@ section { margin-top: 120px; position: relative; }
 .viz-cap { text-align: center; color: var(--soft); font-size: 13.5px; margin-top: 12px; font-weight: 600; }
 #net .edge, #trend .tline { stroke-dasharray: 1400; stroke-dashoffset: 1400; stroke-linecap: round; }
 .seen #net .edge { animation: draw 1.6s cubic-bezier(.3,.6,.3,1) forwards; }
+#net .flow { fill: none; stroke-linecap: round; stroke-dasharray: 3 10;
+  animation: dashflow 1.1s linear infinite; }
+@keyframes dashflow { to { stroke-dashoffset: -26; } }
+#net .traveller { opacity: 0; }
+.seen #net .traveller { opacity: 1; transition: opacity .6s ease 1.8s; }
+#net [data-nd] { cursor: pointer; }
+#net [data-owner], #net [data-cnt] { transition: opacity .35s ease; }
+#net [data-cnt] { opacity: 0; pointer-events: none; }
 .seen #trend .tline { animation: draw 2.2s cubic-bezier(.3,.5,.3,1) forwards; }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 #trend .dot { opacity: 0; transition: opacity .4s ease; }
@@ -520,7 +528,7 @@ section { margin-top: 120px; position: relative; }
     <span class="kicker tealk rv">Chapter 4 · The Power Map</span>
     <h2 class="rv" data-d="1">One person holds this family together</h2>
     <p class="dek rv" data-d="2">Every reply mapped — who answers whom, within the hour.
-      Thicker line = stronger bond. Watch the map draw itself.</p>
+      The messages are flowing live into the middle. <b>Touch any face</b> to isolate their hotline.</p>
     <div class="viz-panel rv" data-d="2">
       <svg id="net" viewBox="0 0 340 314" width="100%" role="img" aria-label="Family reply network"></svg>
       <div class="viz-cap">Mani Anna is the #1 responder for Appa, Amma, Sabareesh <i>and</i> Ram.
@@ -802,37 +810,84 @@ leaderboard("telugu", TELUGU, 10, "%");
   const cx = 170, cy = 152;
   const nodes = [
     { id: "MA", label: "Mani Anna", x: cx, y: cy, r: 30, c: "#12b5a0", hub: true },
-    { id: "AP", label: "Appa",      x: 60,  y: 62,  r: 24, c: "#ffb800", w: 972 },
-    { id: "AM", label: "Amma",      x: 282, y: 66,  r: 21, c: "#8b5cf6", w: 871 },
-    { id: "SK", label: "Sabareesh", x: 296, y: 210, r: 20, c: "#ff6f61", w: 921 },
-    { id: "RA", label: "Ram",       x: 52,  y: 218, r: 18, c: "#f59e5b", w: 440 },
-    { id: "AA", label: "Ashwini",   x: 118, y: 272, r: 14, c: "#42c98d", w: 281 },
-    { id: "LK", label: "Lakshmi",   x: 226, y: 274, r: 13, c: "#ff8fa3", w: 150 },
+    { id: "AP", label: "Appa",      x: 60,  y: 62,  r: 24, c: "#ffb800", w: 972, e: "📸" },
+    { id: "AM", label: "Amma",      x: 282, y: 66,  r: 21, c: "#8b5cf6", w: 871, e: "🙏🏻" },
+    { id: "SK", label: "Sabareesh", x: 296, y: 210, r: 20, c: "#ff6f61", w: 921, e: "😂" },
+    { id: "RA", label: "Ram",       x: 52,  y: 218, r: 18, c: "#f59e5b", w: 440, e: "📰" },
+    { id: "AA", label: "Ashwini",   x: 118, y: 272, r: 14, c: "#42c98d", w: 281, e: "💐" },
+    { id: "LK", label: "Lakshmi",   x: 226, y: 274, r: 13, c: "#ff8fa3", w: 150, e: "👍🏻" },
   ];
   const hub = nodes[0];
   let g = "";
-  [[1, 2, 742], [1, 3, 592]].forEach(([a, b, w]) => {
-    g += `<path class="edge" d="M${nodes[a].x},${nodes[a].y} Q${cx},${cy - 90} ${nodes[b].x},${nodes[b].y}"
-          stroke="#7a7090" stroke-width="${(w / 972 * 7).toFixed(1)}" fill="none" opacity="0.25"/>`;
+  // curved side-channels (Appa<->Amma, Appa<->Sabareesh) with drifting 💬
+  [[1, 2, 742], [1, 3, 592]].forEach(([a, b, w], i) => {
+    const d = `M${nodes[a].x},${nodes[a].y} Q${cx},${cy - 90} ${nodes[b].x},${nodes[b].y}`;
+    const own = `${nodes[a].id} ${nodes[b].id}`;
+    g += `<path class="edge" data-owner="${own}" id="curve${i}" d="${d}"
+          stroke="#7a7090" stroke-width="${(w / 972 * 7).toFixed(1)}" fill="none" opacity="0.22"/>
+          <path class="flow" data-owner="${own}" d="${d}" stroke="#7a7090" stroke-width="2" opacity="0.4"
+            style="animation-duration:1.6s"/>
+          <text class="traveller" data-owner="${own}" font-size="12">💬
+            <animateMotion dur="${(7 + i * 2)}s" repeatCount="indefinite" keyPoints="0;1;0"
+              keyTimes="0;0.5;1" calcMode="linear"><mpath href="#curve${i}"/></animateMotion></text>`;
   });
-  nodes.slice(1).forEach(n => {
-    g += `<path class="edge" d="M${hub.x},${hub.y} L${n.x},${n.y}"
-          stroke="${n.c}" stroke-width="${(n.w / 972 * 8 + 1.5).toFixed(1)}" opacity="0.8" fill="none"/>`;
+  // spokes: dashed flow + emoji travelling from each member into the hub
+  nodes.slice(1).forEach((n, i) => {
+    const d = `M${n.x},${n.y} L${hub.x},${hub.y}`;
+    const dur = (6.5 - n.w / 972 * 3.5).toFixed(1);
+    g += `<path class="edge" data-owner="${n.id}" d="${d}"
+            stroke="${n.c}" stroke-width="${(n.w / 972 * 8 + 1.5).toFixed(1)}" opacity="0.35" fill="none">
+            <title>${n.label} ↔ Mani Anna · ${n.w} replies</title></path>
+          <path class="flow" data-owner="${n.id}" id="spoke${n.id}" d="${d}"
+            stroke="${n.c}" stroke-width="2.6" opacity="0.9"
+            style="animation-duration:${(0.7 + i * 0.13).toFixed(2)}s"/>
+          <text class="traveller" data-owner="${n.id}" font-size="13">${n.e}
+            <animateMotion dur="${dur}s" begin="${(i * 0.7).toFixed(1)}s" repeatCount="indefinite">
+              <mpath href="#spoke${n.id}"/></animateMotion></text>
+          <text data-cnt="${n.id}" x="${((n.x + hub.x) / 2)}" y="${((n.y + hub.y) / 2 - 8)}"
+            text-anchor="middle" font-family="Fredoka,sans-serif" font-size="13" font-weight="700"
+            fill="${n.c}" stroke="#fff" stroke-width="3" paint-order="stroke">${n.w} replies</text>`;
   });
-  // pulsing ring on the hub
-  g += `<circle cx="${hub.x}" cy="${hub.y}" r="${hub.r}" fill="none" stroke="#12b5a0" stroke-width="2">
+  // pulsing rings + orbiting laugh on the hub
+  g += `<g data-owner="ALL">
+        <circle cx="${hub.x}" cy="${hub.y}" r="${hub.r}" fill="none" stroke="#12b5a0" stroke-width="2">
           <animate attributeName="r" values="${hub.r};${hub.r + 16};${hub.r}" dur="2.6s" repeatCount="indefinite"/>
           <animate attributeName="opacity" values="0.7;0;0.7" dur="2.6s" repeatCount="indefinite"/>
-        </circle>`;
+        </circle>
+        <circle cx="${hub.x}" cy="${hub.y}" r="${hub.r}" fill="none" stroke="#12b5a0" stroke-width="1.4">
+          <animate attributeName="r" values="${hub.r};${hub.r + 26};${hub.r}" dur="2.6s" begin="0.7s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.4;0;0.4" dur="2.6s" begin="0.7s" repeatCount="indefinite"/>
+        </circle>
+        <text font-size="13">😂<animateMotion dur="7s" repeatCount="indefinite"
+          path="M ${hub.x + 46},${hub.y} A 46 46 0 1 1 ${hub.x + 45.9},${hub.y - 0.5}"/></text></g>`;
   nodes.forEach(n => {
-    g += `<circle cx="${n.x}" cy="${n.y}" r="${n.r}" fill="${n.c}"
-           ${n.hub ? 'stroke="#33294a" stroke-width="2.5"' : ""}/>` +
-         `<text x="${n.x}" y="${n.y + 4}" text-anchor="middle" font-family="Fredoka,sans-serif"
-           font-size="${n.hub ? 13 : 10.5}" font-weight="700" fill="#fff">${n.id}</text>` +
-         `<text x="${n.x}" y="${n.y + n.r + 15}" text-anchor="middle" font-family="Nunito,sans-serif"
-           font-size="10.5" font-weight="700" fill="#7a7090">${n.label}</text>`;
+    g += `<g data-nd="${n.id}" data-owner="${n.hub ? "ALL" : n.id}">
+          <circle cx="${n.x}" cy="${n.y}" r="${n.r}" fill="${n.c}"
+           ${n.hub ? 'stroke="#33294a" stroke-width="2.5"' : ""}>
+           <title>${n.hub ? "Mani Anna — answers everyone" : n.label + " ↔ Mani Anna · " + n.w + " replies"}</title></circle>
+          <text x="${n.x}" y="${n.y + 4}" text-anchor="middle" font-family="Fredoka,sans-serif"
+           font-size="${n.hub ? 13 : 10.5}" font-weight="700" fill="#fff">${n.id}</text>
+          <text x="${n.x}" y="${n.y + n.r + 15}" text-anchor="middle" font-family="Nunito,sans-serif"
+           font-size="10.5" font-weight="700" fill="#7a7090">${n.label}</text></g>`;
   });
   svg.innerHTML = g;
+  // hover / tap a face -> isolate their hotline and show the count
+  function hl(id) {
+    svg.querySelectorAll("[data-owner]").forEach(o => {
+      const owners = o.dataset.owner.split(" ");
+      o.style.opacity = (!id || owners.includes(id) || owners.includes("ALL")) ? "" : "0.07";
+    });
+    svg.querySelectorAll("[data-cnt]").forEach(c => {
+      c.style.opacity = (c.dataset.cnt === id) ? "1" : "0";
+    });
+  }
+  svg.querySelectorAll("[data-nd]").forEach(el => {
+    const id = el.dataset.nd === "MA" ? null : el.dataset.nd;
+    el.addEventListener("pointerenter", () => hl(id));
+    el.addEventListener("pointerleave", () => hl(null));
+    el.addEventListener("click", ev => { ev.stopPropagation(); hl(id); });
+  });
+  svg.addEventListener("click", () => hl(null));
 })();
 
 /* ============================ RADIAL CLOCK =============================== */
