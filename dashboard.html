@@ -342,5 +342,63 @@ document.querySelectorAll(".rv, .viz-panel").forEach(el=>io.observe(el));
 addEventListener("scroll",()=>{const h=document.documentElement;
   document.getElementById("progress").style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+"%"},{passive:true});
 </script>
+<!-- ===================== FUN LAYER (shared) ===================== -->
+<style>
+.fx-float{position:fixed;pointer-events:none;z-index:0;opacity:0;animation:fxDrift var(--d) linear var(--dl) infinite}
+@keyframes fxDrift{0%{opacity:0;transform:translateY(106vh) rotate(-12deg) scale(.9)}
+  8%{opacity:.16}92%{opacity:.16}100%{opacity:0;transform:translateY(-14vh) rotate(16deg) scale(1.1)}}
+.fx-burst{position:fixed;pointer-events:none;z-index:999;animation:fxPop .9s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes fxPop{0%{opacity:1;transform:translate(0,0) scale(.5) rotate(0)}
+  100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.5) rotate(var(--rot))}}
+.fx-rain{position:fixed;top:-50px;pointer-events:none;z-index:999;opacity:.95;
+  animation:fxRain var(--d) cubic-bezier(.3,.1,.6,1) var(--dl) forwards}
+@keyframes fxRain{to{transform:translateY(115vh) rotate(560deg);opacity:.7}}
+.fx-chili{position:fixed;right:6px;top:-60px;z-index:98;font-size:30px;pointer-events:none;
+  filter:drop-shadow(0 5px 10px #33294a2e)}
+.fx-chili .inner{display:inline-block;animation:fxWobble 1.5s ease-in-out infinite}
+@keyframes fxWobble{0%,100%{transform:rotate(-14deg)}50%{transform:rotate(14deg) translateY(-3px)}}
+.fx-fab{position:fixed;bottom:20px;right:18px;z-index:99;width:58px;height:58px;border-radius:50%;
+  cursor:pointer;font-size:26px;background:#fff;border:2px solid #33294a14;
+  box-shadow:0 10px 30px #33294a22;transition:transform .25s cubic-bezier(.2,1.5,.4,1);
+  animation:fxFab 3s ease-in-out infinite}
+.fx-fab:hover{transform:scale(1.18) rotate(-10deg)}
+@keyframes fxFab{0%,100%{box-shadow:0 10px 30px #33294a22}50%{box-shadow:0 12px 36px #ff6f6160}}
+@media(prefers-reduced-motion:reduce){.fx-float,.fx-chili,.fx-fab{display:none!important}}
+</style>
+<script>
+(function(){
+  const EMO=["🎉","💛","😂","🎂","🌶️","💐","🙏🏻","✨","🥳","📸"];
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  /* drifting background emojis */
+  for(let i=0;i<9;i++){const s=document.createElement("span");s.className="fx-float";
+    s.textContent=EMO[i%EMO.length];
+    s.style.cssText=`left:${rnd(2,95)}vw;font-size:${rnd(16,30)}px;--d:${rnd(18,34)}s;--dl:-${rnd(0,30)}s`;
+    document.body.appendChild(s);}
+  /* click / tap emoji burst */
+  addEventListener("pointerdown",e=>{
+    for(let i=0;i<9;i++){const p=document.createElement("span");p.className="fx-burst";
+      p.textContent=EMO[Math.floor(Math.random()*EMO.length)];
+      const ang=rnd(0,Math.PI*2),dist=rnd(45,120);
+      p.style.cssText=`left:${e.clientX-10}px;top:${e.clientY-10}px;font-size:${rnd(14,24)}px;--dx:${(Math.cos(ang)*dist).toFixed(0)}px;--dy:${(Math.sin(ang)*dist-40).toFixed(0)}px;--rot:${rnd(-160,160).toFixed(0)}deg`;
+      document.body.appendChild(p);setTimeout(()=>p.remove(),950);}
+  },{passive:true});
+  /* chili scroll buddy */
+  const ch=document.createElement("div");ch.className="fx-chili";
+  ch.innerHTML='<span class="inner">🌶️</span>';document.body.appendChild(ch);
+  let party=false;
+  addEventListener("scroll",()=>{const h=document.documentElement;
+    const p=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+    ch.style.top=(8+p*(innerHeight-140))+"px";
+    if(p>0.985&&!party){party=true;rain(50);setTimeout(()=>party=false,6000);}
+  },{passive:true});
+  /* make-it-rain button */
+  function rain(n){for(let i=0;i<n;i++){const d=document.createElement("span");d.className="fx-rain";
+    d.textContent=EMO[Math.floor(Math.random()*EMO.length)];
+    d.style.cssText=`left:${rnd(0,98)}vw;font-size:${rnd(16,32)}px;--d:${rnd(2.2,4.5)}s;--dl:${rnd(0,.9)}s`;
+    document.body.appendChild(d);setTimeout(()=>d.remove(),6000);}}
+  const fab=document.createElement("button");fab.className="fx-fab";fab.textContent="🎉";
+  fab.title="make it rain";fab.onclick=()=>rain(70);document.body.appendChild(fab);
+})();
+</script>
 </body>
 </html>
