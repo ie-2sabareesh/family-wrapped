@@ -53,6 +53,34 @@ body {
   background: linear-gradient(90deg, var(--sun), var(--coral), var(--pink), var(--teal));
   border-radius: 0 99px 99px 0; transition: width .1s linear; }
 
+.topnav { position: sticky; top: 12px; z-index: 90; display: flex; align-items: center; gap: 8px;
+  max-width: 700px; margin: 16px auto 0; padding: 9px 14px; background: #ffffffd9;
+  backdrop-filter: blur(12px); border: 2px solid var(--card-border); border-radius: 99px;
+  box-shadow: var(--shadow); }
+.topnav .brand { font-family: var(--display); font-weight: 700; font-size: 16px;
+  color: var(--ink); text-decoration: none; margin-right: auto; }
+.topnav a.lnk { font-weight: 800; font-size: 13px; color: var(--soft); text-decoration: none;
+  padding: 6px 12px; border-radius: 99px; transition: all .2s; }
+.topnav a.lnk:hover { background: var(--sun-bg); color: var(--ink); transform: translateY(-2px); }
+.topnav a.lnk.active { background: var(--ink); color: #fff; }
+
+.explore { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 48px; }
+.exp-card { display: block; text-decoration: none; color: var(--ink); background: var(--white);
+  border: 2px solid var(--card-border); border-radius: 26px; padding: 24px 20px;
+  box-shadow: var(--shadow); text-align: center;
+  transition: transform .35s cubic-bezier(.2,1.3,.4,1), box-shadow .35s ease; }
+.exp-card:hover { transform: translateY(-8px) rotate(-1deg) scale(1.03);
+  box-shadow: 0 20px 48px #33294a26; }
+.exp-card .ic { font-size: 42px; display: block; animation: floaty 4.5s ease-in-out infinite; }
+.exp-card:nth-child(2) .ic { animation-delay: .7s; }
+.exp-card:nth-child(3) .ic { animation-delay: 1.4s; }
+.exp-card .tt { font-family: var(--display); font-weight: 700; font-size: 19px; margin-top: 10px; }
+.exp-card .dd { font-size: 13px; color: var(--soft); font-weight: 600; margin-top: 4px; }
+.exp-card .go { display: inline-block; margin-top: 12px; font-family: var(--display);
+  font-weight: 600; font-size: 13px; color: #fff; background: var(--ec, var(--coral));
+  padding: 6px 16px; border-radius: 99px; }
+@media (max-width: 560px) { .explore { grid-template-columns: 1fr; } }
+
 .wrap { max-width: 700px; margin: 0 auto; padding: 0 22px 120px; position: relative; z-index: 1; }
 
 /* ============================ TICKER ===================================== */
@@ -264,6 +292,14 @@ section { margin-top: 120px; position: relative; }
 <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
 <div id="progress"></div>
 
+<nav class="topnav">
+  <a class="brand" href="index.html">☀️ Andhra Kaara</a>
+  <a class="lnk active" href="index.html">Wrapped</a>
+  <a class="lnk" href="dashboard.html">Dashboard</a>
+  <a class="lnk" href="roast.html">Roast Show</a>
+  <a class="lnk" href="deepdive.html">Deep Dive</a>
+</nav>
+
 <div class="wrap">
 
   <!-- ============================ HERO ================================== -->
@@ -288,6 +324,26 @@ section { margin-top: 120px; position: relative; }
 <div class="ticker-shell"><div class="ticker" id="ticker"></div></div>
 
 <div class="wrap">
+  <!-- ============================ EXPLORE =============================== -->
+  <section style="margin-top:70px">
+    <span class="kicker sunk rv">Three shows, one family</span>
+    <h2 class="rv" data-d="1">Pick your experience 🎟️</h2>
+    <div class="explore rv" data-d="2">
+      <a class="exp-card" href="roast.html" style="--ec:var(--coral)">
+        <span class="ic">🎭</span><span class="tt">The Roast Show</span>
+        <span class="dd">A 12-act interactive trial. Every member gets sentenced, live.</span>
+        <span class="go">Take a seat →</span></a>
+      <a class="exp-card" href="dashboard.html" style="--ec:var(--teal)">
+        <span class="ic">📊</span><span class="tt">The Dashboard</span>
+        <span class="dd">Every chart: heatmaps, emoji podium, mood meter, six years of data.</span>
+        <span class="go">See the numbers →</span></a>
+      <a class="exp-card" href="deepdive.html" style="--ec:var(--grape)">
+        <span class="ic">🔬</span><span class="tt">The Deep Dive</span>
+        <span class="dd">Network science: who replies to whom, dynasties, forensics.</span>
+        <span class="go">Go deeper →</span></a>
+    </div>
+  </section>
+
   <!-- ============================ CH 1 ================================== -->
   <section>
     <span class="sec-emoji" style="top:-30px; right:4%">📈</span>

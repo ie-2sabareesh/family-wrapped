@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Roast Show — Andhra Kaara</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap');
+:root {
+  --bg:#fff6ea; --ink:#33294a; --soft:#7a7090; --white:#fff;
+  --sun:#ffb800; --coral:#ff6f61; --teal:#12b5a0; --pink:#ff8fa3;
+  --sky:#5aa9ff; --grape:#8b5cf6;
+  --sun-bg:#fff1cc; --pink-bg:#ffe9ee; --mint-bg:#e2f7f0; --sky-bg:#e7f0ff;
+  --card-border:#33294a14; --shadow:0 10px 30px #33294a14;
+  --display:"Fredoka","Comic Sans MS",sans-serif; --body:"Nunito","Segoe UI",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;
+  min-height:100vh;overflow-x:hidden}
+.blob{position:fixed;border-radius:50%;filter:blur(70px);opacity:.5;pointer-events:none;z-index:0}
+.blob.b1{width:46vmax;height:46vmax;top:-18vmax;right:-14vmax;background:#ffd9a3}
+.blob.b2{width:38vmax;height:38vmax;bottom:-14vmax;left:-12vmax;background:#ffdbe3}
+.topnav{position:sticky;top:12px;z-index:90;display:flex;align-items:center;gap:8px;max-width:700px;
+  margin:16px auto 0;padding:9px 14px;background:#ffffffd9;backdrop-filter:blur(12px);
+  border:2px solid var(--card-border);border-radius:99px;box-shadow:var(--shadow)}
+.topnav .brand{font-family:var(--display);font-weight:700;font-size:16px;color:var(--ink);text-decoration:none;margin-right:auto}
+.topnav a.lnk{font-weight:800;font-size:13px;color:var(--soft);text-decoration:none;padding:6px 12px;border-radius:99px;transition:all .2s}
+.topnav a.lnk:hover{background:var(--sun-bg);color:var(--ink);transform:translateY(-2px)}
+.topnav a.lnk.active{background:var(--ink);color:#fff}
+.wrap{max-width:660px;margin:0 auto;padding:30px 22px 60px;position:relative;z-index:1}
+.meta{display:flex;justify-content:space-between;align-items:center;font-family:var(--display);
+  font-weight:600;font-size:13px;color:var(--soft);letter-spacing:.12em;text-transform:uppercase}
+/* stage */
+.stage{position:relative;background:var(--white);border:2px solid var(--card-border);border-radius:32px;
+  padding:40px 34px 34px;margin-top:16px;box-shadow:var(--shadow);min-height:520px;overflow:hidden}
+.stage.shake{animation:shake .45s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px) rotate(-.4deg)}
+  40%{transform:translateX(6px)}60%{transform:translateX(-4px) rotate(.3deg)}80%{transform:translateX(3px)}}
+.spot{position:absolute;top:-40%;left:50%;transform:translateX(-50%);width:130%;height:90%;
+  background:radial-gradient(ellipse at top,#fff1cc99 0%,transparent 65%);pointer-events:none}
+.kick{font-family:var(--display);font-weight:600;font-size:12px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--soft);opacity:0;animation:fadeUp .5s ease .1s forwards}
+.big-ava{width:86px;height:86px;border-radius:30px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);font-weight:700;font-size:30px;color:#fff;margin:18px 0 14px;
+  box-shadow:var(--shadow);opacity:0;transform:scale(.3) rotate(-14deg);
+  animation:popAva .55s cubic-bezier(.2,1.4,.4,1) .25s forwards}
+@keyframes popAva{to{opacity:1;transform:scale(1) rotate(0)}}
+.nm{font-family:var(--display);font-weight:700;font-size:clamp(30px,6.6vw,44px);line-height:1.06;
+  opacity:0;animation:fadeUp .55s ease .4s forwards}
+.ttl{font-weight:800;font-size:16px;color:var(--acc,var(--coral));margin-top:5px;
+  opacity:0;animation:fadeUp .55s ease .55s forwards}
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}
+.chips .c{font-size:12.5px;font-weight:800;padding:7px 14px;border-radius:99px;
+  background:var(--cbg,var(--sun-bg));opacity:0;transform:scale(.5);
+  animation:popChip .45s cubic-bezier(.2,1.5,.4,1) forwards}
+@keyframes popChip{to{opacity:1;transform:scale(1)}}
+.lines{margin-top:26px;display:flex;flex-direction:column;gap:15px;max-width:56ch}
+.lines p{font-size:16.5px;border-left:3px solid var(--acc,var(--coral));padding-left:15px;
+  opacity:0;animation:fadeUp .6s ease forwards}
+.lines p b{color:var(--acc,var(--coral))}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.stamp{position:absolute;bottom:30px;right:28px;padding:9px 18px;border:3.5px solid var(--coral);
+  border-radius:12px;color:var(--coral);background:#fff;font-family:var(--display);font-weight:700;
+  font-size:16px;letter-spacing:.2em;text-transform:uppercase;transform:rotate(8deg) scale(4);opacity:0}
+.stamp.on{animation:slam .45s cubic-bezier(.2,1.2,.3,1.3) forwards}
+@keyframes slam{to{opacity:1;transform:rotate(8deg) scale(1)}}
+.stamp.green{border-color:var(--teal);color:var(--teal)}
+/* controls */
+.controls{display:flex;align-items:center;gap:12px;margin-top:24px}
+.btn{font-family:var(--display);font-weight:600;font-size:15px;border:none;cursor:pointer;
+  padding:12px 26px;border-radius:99px;transition:transform .2s cubic-bezier(.2,1.4,.4,1),box-shadow .2s}
+.btn:hover{transform:translateY(-3px) scale(1.04)}
+.btn.primary{background:var(--ink);color:#fff;box-shadow:var(--shadow)}
+.btn.ghost{background:var(--white);color:var(--ink);border:2px solid var(--card-border)}
+.btn:disabled{opacity:.35;cursor:default;transform:none}
+.dots{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+.dot{width:9px;height:9px;border-radius:99px;background:#33294a22;cursor:pointer;
+  transition:all .25s cubic-bezier(.2,1.4,.4,1)}
+.dot.on{width:26px;background:var(--coral)}
+.hint{text-align:center;color:var(--soft);font-size:12.5px;font-weight:700;margin-top:16px}
+.confetti{position:absolute;top:-12px;width:10px;height:16px;border-radius:3px;opacity:0;pointer-events:none;
+  animation:fall var(--dur) ease-in var(--delay) forwards}
+@keyframes fall{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(560px) rotate(720deg)}}
+</style>
+</head>
+<body>
+<div class="blob b1"></div><div class="blob b2"></div>
+
+<nav class="topnav">
+  <a class="brand" href="index.html">☀️ Andhra Kaara</a>
+  <a class="lnk" href="index.html">Wrapped</a>
+  <a class="lnk" href="dashboard.html">Dashboard</a>
+  <a class="lnk active" href="roast.html">Roast Show</a>
+  <a class="lnk" href="deepdive.html">Deep Dive</a>
+</nav>
+
+<div class="wrap">
+  <div class="meta"><span>🎭 The Roast Show</span><span id="counter">Act 1</span></div>
+  <div class="stage" id="stage"></div>
+  <div class="controls">
+    <button class="btn ghost" id="prev">← Back</button>
+    <button class="btn primary" id="next">Begin the trial 🔨</button>
+    <div class="dots" id="dots"></div>
+  </div>
+  <p class="hint">use ← → arrow keys, or tap the dots · every stat is real</p>
+</div>
+
+<script>
+const ACTS=[
+ {kick:"CASE No. 2020-1026 · THE PEOPLE vs. ANDHRA KAARA",ava:"⚖️",avaBg:"#33294a",
+  name:"The Family Trial",title:"Eleven acts. Sixteen suspects. Zero mercy.",acc:"#8b5cf6",cbg:"#e7f0ff",
+  chips:["27,651 exhibits","6 years of evidence","everything computed twice"],
+  lines:["An impartial algorithm has read this family's entire chat history. Every message. Every sticker. Every 4 AM forward.",
+   "No family member influenced these findings. The computer alone is responsible — it even convicted the person who ran it.",
+   "Nobody is innocent. Press next to meet the accused."],stamp:"Court is in session"},
+ {kick:"Exhibit A",ava:"AP",avaBg:"#ffb800",name:"Appa",title:"The Midnight Broadcaster",acc:"#c98f00",cbg:"#fff1cc",
+  chips:["5,872 msgs — 21% of everything","695 convos started","198 deleted 👀"],
+  lines:["One out of every five messages in this family's history is Appa. The group chat is legally his personal radio station.",
+   "On Aug 2, 2024 at 3 AM he sent <b>157 consecutive messages</b> while everyone slept. Nobody replied. A concert for an empty stadium.",
+   "And the 198 deleted messages? What did you type, Appa? What did the family almost see?"],stamp:"Guilty"},
+ {kick:"Exhibit B",ava:"MA",avaBg:"#12b5a0",name:"Mani Anna",title:"Laughs Loudest At His Own Jokes",acc:"#12b5a0",cbg:"#e2f7f0",
+  chips:["6,893 emojis","😂 ×1,326","one 2,073-word message"],
+  lines:["Has used the crying-laughing emoji <b>1,326 times</b>. Forensics suggest at least a thousand were for his own jokes.",
+   "In December 2023 he sent a single message of 2,073 words. That is not a text. That is a dissertation. Nobody has finished it.",
+   "He also shows up every 1.4 days without fail — the most loyal member. Loyal, and completely unhinged."],stamp:"Guilty"},
+ {kick:"Exhibit C",ava:"AM",avaBg:"#8b5cf6",name:"Amma",title:"The Paragraph Machine",acc:"#8b5cf6",cbg:"#e7f0ff",
+  chips:["31.4 words per message","3× the family average","record: 1,949 words"],
+  lines:["The rest of the family texts 'good morning'. Amma publishes the morning edition, with editorials and a devotional supplement.",
+   "Her average message is <b>31.4 words</b> — triple anyone else. She does not text. She narrates.",
+   "Remember her 1,949-word record. It becomes a weapon two acts from now."],stamp:"Guilty"},
+ {kick:"Exhibit D",ava:"SK",avaBg:"#ff6f61",name:"Sabareesh",title:"The Speed Grump",acc:"#ff6f61",cbg:"#ffe9ee",
+  chips:["69-second replies","7.5 words average","lowest positivity score 🥇"],
+  lines:["Replies in <b>69 seconds</b> at any hour of any day. Always online. The court questions his lifestyle.",
+   "All that speed delivers an average of 7.5 words. Lightning fast, emotionally unavailable.",
+   "And the algorithm's crown finding: the <b>lowest positivity score in the entire family</b>. Certified grumpiest. Yes — the computer convicted its own operator. Impartiality hurts."],stamp:"Guilty"},
+ {kick:"Exhibit E",ava:"RA",avaBg:"#f59e5b",name:"Ram Attimber",title:"The 4 AM News Agency",acc:"#e07b39",cbg:"#fff1cc",
+  chips:["joined 2024 → #1 by 2025","2,713 bulletins","ignored 36.6% 🪦"],
+  lines:["Sent his first message in 2024. Twelve months later he had dethroned a four-year Appa dynasty. Zero warm-up laps.",
+   "Delivers breaking news before the newspapers wake up — today's bulletin was filed at <b>4:19 AM</b>.",
+   "The price of pre-dawn journalism: left on read <b>36.6%</b> of the time. The highest rate in the family. The news must go on."],stamp:"Guilty"},
+ {kick:"Exhibit F · Spotlight",ava:"LK",avaBg:"#ff8fa3",name:"Lakshmi",title:"Fighter-Pilot Reflexes, Fortune-Cookie Vocabulary",acc:"#ff6f61",cbg:"#ffe9ee",
+  chips:["58-second replies ⚡","3.6 words average","250 stickers"],
+  lines:["Replies in <b>58 seconds</b> — the fastest fingers in the family. And what do those record reflexes deliver? <b>3.6 words.</b> That's not a reply, that's a receipt.",
+   "Visits the group once every 6.8 days, like a landlord inspecting the property. Drops a sticker. Vanishes.",
+   "The archive contains exactly ONE real message from her: 151 words, December 2021. Historians are studying what happened that day."],stamp:"Guilty ×2"},
+ {kick:"Exhibit G · Spotlight",ava:"SN",avaBg:"#5aa9ff",name:"Sneha",title:"The Celebrity Who Won't Speak To Fans",acc:"#8b5cf6",cbg:"#e7f0ff",
+  chips:["mentioned 259 times","best ever: 30 words","≈1,620 words in 6 years"],
+  lines:["'Sneha' is the <b>most-mentioned name in the chat</b> — 259 times. The family cannot stop discussing her.",
+   "Her contribution to the discussion: 3.6 words per message, six-year personal best of <b>thirty words</b>.",
+   "Verified twice: her estimated lifetime output (~1,620 words) is <b>less than ONE Amma message</b> (1,949). One Amma paragraph outweighs Sneha's entire career. Case closed via mic drop."],stamp:"Guilty ×2"},
+ {kick:"Exhibit H · Spotlight",ava:"GA",avaBg:"#42c98d",name:"Gayathri Akka",title:"Strictly Birthdays. By Appointment Only.",acc:"#12b5a0",cbg:"#e2f7f0",
+  chips:["🎂×110 🍫×107 💐×104","longest msg: 17 words","34 deleted 🤨"],
+  lines:["Top three emojis: cake, chocolate, bouquet. That is not a personality — that is a <b>greeting-card subscription service</b>.",
+   "Longest message in six years: <b>seventeen words</b>. Appa deletes longer messages than she has ever written.",
+   "Yet she deleted 34 messages. What could a seventeen-word-maximum person need to unsay 34 times? The court demands answers. (Mercy clause: when she speaks, only 6.7% get ignored — lowest in the family. Scarcity is power.)"],stamp:"Guilty ×2"},
+ {kick:"Exhibit I",ava:"?",avaBg:"#5aa9ff",name:"+91 87••• •••92",title:"The Unsaved Legend",acc:"#5aa9ff",cbg:"#e7f0ff",
+  chips:["2,028 messages","6 years of service","saved by: nobody"],
+  lines:["This number sent <b>2,028 messages</b>. It wished, blessed, forwarded, and laughed for six straight years.",
+   "In those six years, not one family member spent the four seconds required to save the contact. Everyone knows who it is. Nobody will commit.",
+   "Then, in 2025 — silence. Vanished. Honorable mention to the other number that appeared for 4 days in 2021, dumped 160 photos, and left forever."],stamp:"Guilty"},
+ {kick:"Exhibit J",ava:"🐢",avaBg:"#7a7090",name:"The Slowpokes",title:"Krishna Attimber · Priya Manni · Aditya Anna",acc:"#7a7090",cbg:"#fff1cc",
+  chips:["Krishna: 13m 34s replies","Priya: 58 voice notes 🎙️","Aditya: 295 msgs, nicest 😇"],
+  lines:["Krishna Attimber's median reply time is <b>thirteen and a half minutes</b>. He responds to 'good morning' when it is no longer morning.",
+   "Priya Manni filed 58 voice notes, because typing is for other people. The court has not transcribed them and never will.",
+   "And Aditya Anna: 295 messages in six years, yet the <b>highest positivity score</b> in the family. Appears monthly, blesses everyone, vanishes like a monsoon cloud. Suspiciously nice."],stamp:"Guilty"},
+ {kick:"Closing arguments",ava:"💛",avaBg:"#12b5a0",name:"The Verdict",title:"Six years of evidence, summarized",acc:"#12b5a0",cbg:"#e2f7f0",
+  chips:["90% positive","'happy' ×1,265","142 silent days out of 2,099"],
+  lines:["Having reviewed 27,651 messages, the court finds this family guilty of relentless birthday wishes, aggressive blessings, and industrial-scale emoji deployment.",
+   "Ninety percent of everything said is positive. The most common word in six years is <b>'happy'</b>.",
+   "The sentence: continue exactly as you are. Case dismissed. 🎉"],stamp:"Guilty of being wholesome",green:true,finale:true},
+];
+
+let idx=0;
+const stage=document.getElementById("stage");
+const dots=document.getElementById("dots");
+dots.innerHTML=ACTS.map((_,i)=>`<div class="dot${i===0?" on":""}" data-i="${i}"></div>`).join("");
+
+function render(){
+  const a=ACTS[idx];
+  document.getElementById("counter").textContent=`Act ${idx+1} of ${ACTS.length}`;
+  document.getElementById("prev").disabled=idx===0;
+  const nxt=document.getElementById("next");
+  nxt.textContent=idx===0?"Begin the trial 🔨":(idx===ACTS.length-1?"Encore? Start over ↺":"Next exhibit →");
+  document.querySelectorAll(".dot").forEach((d,i)=>d.classList.toggle("on",i===idx));
+  const lineDelay=.75, chipStep=.14;
+  let confetti="";
+  if(a.finale){const cols=["#ffb800","#ff6f61","#12b5a0","#8b5cf6","#ff8fa3","#5aa9ff"];
+    for(let i=0;i<90;i++)confetti+=`<div class="confetti" style="left:${(Math.random()*100).toFixed(1)}%;background:${cols[i%6]};--dur:${(2.4+Math.random()*2.4).toFixed(2)}s;--delay:${(1.5+Math.random()*1.6).toFixed(2)}s"></div>`;}
+  stage.innerHTML=`<div class="spot"></div>${confetti}
+    <div style="--acc:${a.acc}">
+      <div class="kick">${a.kick}</div>
+      <div class="big-ava" style="background:${a.avaBg}">${a.ava}</div>
+      <div class="nm">${a.name}</div>
+      <div class="ttl" style="--acc:${a.acc}">${a.title}</div>
+      <div class="chips">${a.chips.map((c,i)=>`<span class="c" style="--cbg:${a.cbg};animation-delay:${(.6+i*chipStep).toFixed(2)}s">${c}</span>`).join("")}</div>
+      <div class="lines" style="--acc:${a.acc}">${a.lines.map((l,i)=>`<p style="animation-delay:${(1+i*lineDelay).toFixed(2)}s">${l}</p>`).join("")}</div>
+    </div>
+    <div class="stamp${a.green?" green":""}" id="stamp">${a.stamp}</div>`;
+  const slamAt=(1+a.lines.length*lineDelay+.4)*1000;
+  setTimeout(()=>{const s=document.getElementById("stamp");
+    if(s){s.classList.add("on");stage.classList.add("shake");
+      setTimeout(()=>stage.classList.remove("shake"),500);}},slamAt);
+  stage.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function go(i){idx=(i+ACTS.length)%ACTS.length;render();}
+document.getElementById("next").onclick=()=>go(idx+1);
+document.getElementById("prev").onclick=()=>go(idx-1);
+dots.onclick=e=>{if(e.target.dataset.i!==undefined)go(+e.target.dataset.i)};
+addEventListener("keydown",e=>{if(e.key==="ArrowRight")go(idx+1);if(e.key==="ArrowLeft")go(idx-1)});
+render();
+</script>
+</body>
+</html>

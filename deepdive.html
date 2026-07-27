@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deep Dive — Andhra Kaara Wrapped</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap');
+:root {
+  --bg:#fff6ea; --ink:#33294a; --soft:#7a7090; --white:#fff;
+  --sun:#ffb800; --coral:#ff6f61; --teal:#12b5a0; --pink:#ff8fa3;
+  --sky:#5aa9ff; --grape:#8b5cf6;
+  --mint-bg:#e2f7f0; --pink-bg:#ffe9ee; --sun-bg:#fff1cc; --sky-bg:#e7f0ff;
+  --card-border:#33294a14; --shadow:0 10px 30px #33294a14;
+  --display:"Fredoka","Comic Sans MS",sans-serif; --body:"Nunito","Segoe UI",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;overflow-x:hidden}
+.blob{position:fixed;border-radius:50%;filter:blur(70px);opacity:.5;pointer-events:none;z-index:0}
+.blob.b1{width:46vmax;height:46vmax;top:-18vmax;right:-14vmax;background:#cdeee4}
+.blob.b2{width:38vmax;height:38vmax;bottom:-14vmax;left:-12vmax;background:#ffd9a3}
+#progress{position:fixed;top:0;left:0;height:5px;width:0;z-index:100;background:linear-gradient(90deg,var(--teal),var(--sky),var(--grape));transition:width .1s linear}
+.topnav{position:sticky;top:12px;z-index:90;display:flex;align-items:center;gap:8px;max-width:700px;
+  margin:16px auto 0;padding:9px 14px;background:#ffffffd9;backdrop-filter:blur(12px);
+  border:2px solid var(--card-border);border-radius:99px;box-shadow:var(--shadow)}
+.topnav .brand{font-family:var(--display);font-weight:700;font-size:16px;color:var(--ink);text-decoration:none;margin-right:auto}
+.topnav a.lnk{font-weight:800;font-size:13px;color:var(--soft);text-decoration:none;padding:6px 12px;border-radius:99px;transition:all .2s}
+.topnav a.lnk:hover{background:var(--mint-bg);color:var(--ink);transform:translateY(-2px)}
+.topnav a.lnk.active{background:var(--ink);color:#fff}
+.wrap{max-width:700px;margin:0 auto;padding:0 22px 120px;position:relative;z-index:1}
+.kicker{display:inline-block;font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase;background:var(--ink);color:#fff;padding:6px 16px;border-radius:99px}
+.kicker.tealk{background:var(--teal)} .kicker.coralk{background:var(--coral)} .kicker.grapek{background:var(--grape)} .kicker.skyk{background:var(--sky)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(36px,8vw,56px);line-height:1.06;margin-top:14px}
+h2{font-family:var(--display);font-weight:600;font-size:clamp(26px,5.4vw,36px);line-height:1.15;margin:14px 0 8px}
+.dek{color:var(--soft);font-size:16.5px;max-width:52ch}
+.rainbow{background:linear-gradient(100deg,var(--teal),var(--sky) 50%,var(--grape));-webkit-background-clip:text;background-clip:text;color:transparent}
+.rv{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.2,.6,.2,1),transform .8s cubic-bezier(.2,.6,.2,1)}
+.rv.seen{opacity:1;transform:none}
+section{margin-top:100px;position:relative}
+.viz-panel{background:var(--white);border:2px solid var(--card-border);border-radius:28px;padding:28px 22px 18px;margin-top:34px;box-shadow:var(--shadow)}
+.viz-cap{text-align:center;color:var(--soft);font-size:13px;margin-top:12px;font-weight:600}
+#trend .tline{stroke-dasharray:1400;stroke-dashoffset:1400;stroke-linecap:round}
+.seen #trend .tline{animation:draw 2.2s cubic-bezier(.3,.5,.3,1) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+#trend .dot{opacity:0;transition:opacity .4s ease}
+.seen #trend .dot{opacity:1}
+.legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px}
+.legend span{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:800;color:var(--soft)}
+.legend i{width:14px;height:14px;border-radius:5px;display:inline-block}
+.matrix{display:grid;gap:3px;margin-top:8px}
+.mx-cell{aspect-ratio:1;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;color:#fff;opacity:0;transform:scale(.3);transition:opacity .45s ease var(--md,0s),transform .45s cubic-bezier(.2,1.4,.4,1) var(--md,0s)}
+.seen .mx-cell{opacity:1;transform:scale(1)}
+.mx-label{display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;color:var(--soft)}
+/* guardians */
+.guards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:36px}
+.guard{background:var(--white);border:2px solid var(--card-border);border-radius:22px;padding:18px;
+  box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;transition:transform .3s cubic-bezier(.2,1.4,.4,1)}
+.guard:hover{transform:translateY(-5px) rotate(-.6deg)}
+.guard .pair{font-size:24px;font-family:var(--display);font-weight:700;display:flex;align-items:center;gap:5px}
+.guard .pair .arrow{color:var(--teal);font-size:17px;animation:pulse-arrow 1.8s ease-in-out infinite}
+@keyframes pulse-arrow{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+.guard small{display:block;font-size:12px;color:var(--soft);font-weight:700}
+.mini-ava{width:38px;height:38px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:13px;color:#fff;flex-shrink:0}
+/* bars */
+.lb{margin-top:34px;display:flex;flex-direction:column;gap:13px}
+.lb-row{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center}
+.ava{width:44px;height:44px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:14px;color:#fff;box-shadow:var(--shadow)}
+.ava:hover{animation:wiggle .5s ease-in-out}
+@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-9deg)}75%{transform:rotate(9deg)}}
+.lb-top{display:flex;justify-content:space-between;margin-bottom:6px}
+.lb-name{font-weight:800;font-size:14.5px}
+.lb-val{color:var(--soft);font-size:13px;font-weight:700}
+.lb-track{height:13px;border-radius:99px;background:#33294a0d;overflow:hidden}
+.lb-fill{height:100%;border-radius:99px;width:0;transition:width 1.4s cubic-bezier(.16,.8,.26,1)}
+.seen .lb-fill{width:var(--w)}
+.statgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:38px}
+.stat{border-radius:24px;padding:22px;background:var(--white);border:2px solid var(--card-border);box-shadow:var(--shadow);transition:transform .3s cubic-bezier(.2,1.4,.4,1)}
+.stat:hover{transform:translateY(-5px)}
+.stat b{display:block;font-family:var(--display);font-weight:700;font-size:32px}
+.stat span{font-size:13.5px;color:var(--soft);display:block;margin-top:4px;font-weight:600}
+.stat.sunbg{background:var(--sun-bg)} .stat.sunbg b{color:#c98f00}
+.stat.mintbg{background:var(--mint-bg)} .stat.mintbg b{color:var(--teal)}
+.stat.pinkbg{background:var(--pink-bg)} .stat.pinkbg b{color:var(--coral)}
+.stat.skybg{background:var(--sky-bg)} .stat.skybg b{color:var(--sky)}
+/* forensic cards */
+.fcase{background:var(--white);border:2px solid var(--card-border);border-radius:26px;padding:26px;
+  margin-top:24px;box-shadow:var(--shadow);position:relative;overflow:hidden;
+  transition:transform .3s cubic-bezier(.2,1.3,.4,1)}
+.fcase:hover{transform:translateY(-5px)}
+.fcase .tag{position:absolute;top:0;right:0;background:var(--acc,var(--coral));color:#fff;
+  font-family:var(--display);font-weight:600;font-size:12px;padding:7px 18px;border-radius:0 24px 0 18px}
+.fcase h3{font-family:var(--display);font-weight:600;font-size:22px;margin-bottom:6px;padding-right:110px}
+.fcase p{font-size:15px;color:#554d6e}
+.fcase b{color:var(--acc,var(--coral))}
+.fcase .wordbits{margin-top:12px;display:flex;flex-wrap:wrap;gap:7px}
+.fcase .wordbits span{font-size:12px;font-weight:800;padding:4px 12px;border-radius:99px;background:var(--sun-bg);font-style:italic}
+.pull{font-family:var(--display);font-weight:600;font-size:clamp(21px,4.6vw,29px);line-height:1.35;text-align:center;margin:60px auto 0;max-width:26ch}
+.pull b{color:var(--teal)}
+.foot{margin-top:100px;text-align:center;color:var(--soft);font-size:13px;line-height:2;font-weight:600}
+.foot a{color:var(--teal);font-weight:800}
+@media(max-width:560px){.guards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="blob b1"></div><div class="blob b2"></div>
+<div id="progress"></div>
+
+<nav class="topnav">
+  <a class="brand" href="index.html">☀️ Andhra Kaara</a>
+  <a class="lnk" href="index.html">Wrapped</a>
+  <a class="lnk" href="dashboard.html">Dashboard</a>
+  <a class="lnk" href="roast.html">Roast Show</a>
+  <a class="lnk active" href="deepdive.html">Deep Dive</a>
+</nav>
+
+<div class="wrap">
+  <header style="padding-top:60px" class="rv seen">
+    <span class="kicker tealk">The Deep Dive</span>
+    <h1>What six years of data<br><span class="rainbow">really reveals</span> 🔬</h1>
+    <p class="dek" style="margin-top:14px">Network science, trend analysis and detective work
+      on 27,651 messages. This is where the family's true structure hides.</p>
+  </header>
+
+  <!-- TRENDS -->
+  <section>
+    <span class="kicker skyk rv">Power over time</span>
+    <h2 class="rv">The rise, the fall, the takeover</h2>
+    <p class="dek rv">Messages per person per year. Watch the Appa dynasty, Ram's meteoric arrival,
+      and the Mystery Number's tragic disappearance draw themselves.</p>
+    <div class="viz-panel rv">
+      <svg id="trend" viewBox="0 0 560 320" width="100%"></svg>
+      <div class="legend" id="trendLegend"></div>
+      <div class="viz-cap">Yearly champions: Mani Anna (2020) → Appa (2021–24) → Ram Attimber (2025–26) · 2026 is Jan–Jul</div>
+    </div>
+  </section>
+
+  <!-- MATRIX -->
+  <section>
+    <span class="kicker tealk rv">The reply network</span>
+    <h2 class="rv">Who answers whom 💬</h2>
+    <p class="dek rv">Each square counts how often the row-person replied to the column-person
+      within an hour. Darker teal = stronger bond.</p>
+    <div class="viz-panel rv">
+      <div class="matrix" id="matrix"></div>
+      <div class="viz-cap">Hottest lane: Sabareesh → Mani Anna (495). Coldest: Ram ↔ Mystery No. — 3 replies in six years 🥶</div>
+    </div>
+  </section>
+
+  <!-- GUARDIANS -->
+  <section>
+    <span class="kicker grapek rv">Guardians</span>
+    <h2 class="rv">Everyone's most loyal responder 🫀</h2>
+    <p class="dek rv">For each member: who answers them most. Notice a pattern?</p>
+    <div class="guards rv" id="guards"></div>
+    <p class="pull rv">Mani Anna is the #1 responder for <b>four different people</b>.
+      He doesn't use the group chat. He IS the group chat.</p>
+  </section>
+
+  <!-- LEFT ON READ + TELUGU -->
+  <section>
+    <span class="kicker coralk rv">Social physics</span>
+    <h2 class="rv">The graveyard &amp; the staircase</h2>
+    <p class="dek rv">Left-on-read rates (openers ignored for 6+ hours), then the Telugu-script
+      generational staircase.</p>
+    <div class="lb rv" id="ignored"></div>
+    <div style="height:36px"></div>
+    <div class="lb rv" id="telugu"></div>
+    <div class="viz-cap rv">Top: % of conversation-openers ignored 🪦 · Bottom: % of messages containing Telugu script 🗣️</div>
+  </section>
+
+  <!-- SESSIONS -->
+  <section>
+    <span class="kicker rv">Conversation physics</span>
+    <h2 class="rv">How this family actually talks</h2>
+    <div class="statgrid rv">
+      <div class="stat skybg"><b data-count="8099">0</b><span>separate conversations detected</span></div>
+      <div class="stat pinkbg"><b>64.5%</b><span>were pure monologues — one speaker, zero replies 💀</span></div>
+      <div class="stat sunbg"><b>3.4</b><span>average messages per conversation. Hit-and-run texting.</span></div>
+      <div class="stat mintbg"><b>242</b><span>messages in the longest conversation ever — Mar 20, 2022, 141 minutes, 8 people</span></div>
+      <div class="stat mintbg"><b>114</b><span>consecutive days with at least one message (Feb–May 2022) 🔥</span></div>
+      <div class="stat skybg"><b>1.4</b><span>days between Mani Anna's visits, on average, for six years</span></div>
+    </div>
+  </section>
+
+  <!-- FORENSICS -->
+  <section>
+    <span class="kicker grapek rv">Record-day forensics</span>
+    <h2 class="rv">What actually happened on the biggest days</h2>
+
+    <div class="fcase rv" style="--acc:var(--coral)">
+      <div class="tag">322 msgs · #1 all-time</div>
+      <h3>💍 Sep 4, 2022 — the wedding day</h3>
+      <p>The loudest day in family history. Amma alone fired <b>113 messages</b>. The word cloud
+        leaves no doubt about the topic:</p>
+      <div class="wordbits"><span>muhurtham</span><span>pics</span><span>looks</span><span>son</span><span>india</span><span>today</span></div>
+    </div>
+
+    <div class="fcase rv" style="--acc:var(--grape)">
+      <div class="tag">202 msgs · #3 all-time</div>
+      <h3>📿 Sep 5, 2022 — fixing the date</h3>
+      <p>The sequel, one day later. The family consulted the panchang to lock the wedding date —
+        <b>two all-time records from one wedding</b>.</p>
+      <div class="wordbits"><span>mahalaya</span><span>marriage</span><span>drik</span><span>vakyam</span><span>tamil</span><span>garu</span></div>
+    </div>
+
+    <div class="fcase rv" style="--acc:var(--teal)">
+      <div class="tag">250 msgs · #2 all-time</div>
+      <h3>🌕 Mar 20, 2022 — the full-moon broadcast</h3>
+      <p>An Arunachala full-moon visit, live-streamed to the family: <b>193 of 250 messages were
+        photos and videos</b>, led by Lakshmi (86) and Ashwini Akka (80).</p>
+      <div class="wordbits"><span>arunachala</span><span>full</span><span>moon</span><span>chitti</span><span>god</span></div>
+    </div>
+
+    <div class="fcase rv" style="--acc:var(--sky)">
+      <div class="tag">157 msgs · 1 hour</div>
+      <h3>🌙 Aug 2, 2024 — the 3 AM concert</h3>
+      <p>The single loudest HOUR in family history: Appa, alone, at 3 in the morning,
+        sent <b>157 consecutive messages</b>. Not one person replied. A performance
+        for an empty theatre. Respect.</p>
+      <div class="wordbits"><span>solo artist: Appa</span><span>audience: asleep</span></div>
+    </div>
+  </section>
+
+  <p class="foot">Part of <a href="index.html">Andhra Kaara — Wrapped &amp; Roasted</a> ·
+    <a href="dashboard.html">see the Dashboard 📊</a> · <a href="roast.html">watch the Roast Show 🎭</a><br>
+    Network built from 60,000+ reply pairs · birthday calendar reverse-engineered from wishes alone 🤖</p>
+</div>
+
+<script>
+const YEARS=["2020","2021","2022","2023","2024","2025","2026*"];
+const TRENDS=[["Appa","#ffb800",[78,948,1263,1305,1218,615,445]],
+ ["Mani Anna","#12b5a0",[90,944,1039,851,1030,846,549]],
+ ["Amma","#8b5cf6",[28,537,871,623,705,391,268]],
+ ["Sabareesh","#ff6f61",[31,479,786,503,586,390,312]],
+ ["Ram Attimber","#f59e5b",[null,null,null,null,625,1056,1032]],
+ ["Mystery No.","#5aa9ff",[0,377,437,752,462,0,0]]];
+const MX_PEOPLE=["AP","MA","AM","SK","RA","📱","AA","LK"];
+const MX=[[0,492,382,298,175,218,160,97],[480,0,432,426,234,112,150,82],[360,439,0,209,121,129,130,66],[294,495,181,0,83,116,104,90],[139,206,120,88,0,1,20,23],[212,102,106,88,2,0,68,63],[147,131,130,115,24,63,0,84],[92,68,79,125,27,56,101,0]];
+const GUARDS=[["Appa","AP","#ffb800","Mani Anna","MA","#12b5a0",480],
+ ["Mani Anna","MA","#12b5a0","Sabareesh","SK","#ff6f61",495],
+ ["Amma","AM","#8b5cf6","Mani Anna","MA","#12b5a0",432],
+ ["Sabareesh","SK","#ff6f61","Mani Anna","MA","#12b5a0",426],
+ ["Ram","RA","#f59e5b","Mani Anna","MA","#12b5a0",234],
+ ["Mystery No.","?","#5aa9ff","Appa","AP","#ffb800",218],
+ ["Ashwini","AA","#42c98d","Appa","AP","#ffb800",160],
+ ["Lakshmi","LK","#ff8fa3","Appa","AP","#ffb800",97]];
+const IGNORED=[["Ram Attimber 🪦","RA",36.6,"#f59e5b"],["Appa","AP",33.7,"#ffb800"],["Mani Anna","MA",33.2,"#12b5a0"],["Sabareesh","SK",28.6,"#ff6f61"],["Mystery No. 📱","?",25.2,"#5aa9ff"],["Amma","AM",23.4,"#8b5cf6"],["Ashwini Akka","AA",17.7,"#42c98d"],["Gayathri 👑","GA",6.7,"#e5c454"]];
+const TELUGU=[["Amma","AM",8.7,"#8b5cf6"],["Appa","AP",7.4,"#ffb800"],["Mani Anna","MA",5.7,"#12b5a0"],["Ashwini Akka","AA",1.1,"#42c98d"],["Lakshmi","LK",0.6,"#ff8fa3"],["Sabareesh","SK",0.2,"#ff6f61"],["Ram Attimber","RA",0.05,"#f59e5b"]];
+
+/* trend */
+(function(){
+  const L=46,R=545,T=18,B=282,maxY=1400;
+  const x=i=>L+i*(R-L)/(YEARS.length-1), y=v=>B-(v/maxY)*(B-T);
+  let g="";
+  [0,350,700,1050,1400].forEach(v=>{g+=`<line x1="${L}" y1="${y(v)}" x2="${R}" y2="${y(v)}" stroke="#33294a12" stroke-width="1.5"/>
+    <text x="${L-8}" y="${y(v)+4}" text-anchor="end" font-family="Nunito" font-weight="700" font-size="11" fill="#7a7090">${v}</text>`});
+  YEARS.forEach((yr,i)=>{g+=`<text x="${x(i)}" y="${B+22}" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="12" fill="#7a7090">${yr}</text>`});
+  TRENDS.forEach(([name,color,vals])=>{
+    const pts=vals.map((v,i)=>v===null?null:`${x(i)},${y(v)}`).filter(Boolean);
+    g+=`<polyline class="tline" points="${pts.join(" ")}" fill="none" stroke="${color}" stroke-width="3.5" opacity="0.9"/>`;
+    vals.forEach((v,i)=>{if(v===null)return;
+      g+=`<circle class="dot" style="transition-delay:${1200+i*140}ms" cx="${x(i)}" cy="${y(v)}" r="4.5" fill="${color}" stroke="#fff" stroke-width="2"/>`});
+  });
+  g+=`<text x="${x(4)}" y="${y(625)-14}" text-anchor="middle" font-family="Fredoka" font-weight="600" font-size="11.5" fill="#e07b39">Ram arrives 🚀</text>`;
+  g+=`<text x="${x(4)+26}" y="${y(462)+26}" text-anchor="middle" font-family="Fredoka" font-weight="600" font-size="11.5" fill="#5aa9ff">last seen 👻</text>`;
+  document.getElementById("trend").innerHTML=g;
+  document.getElementById("trendLegend").innerHTML=TRENDS.map(([n,c])=>`<span><i style="background:${c}"></i>${n}</span>`).join("");
+})();
+
+/* matrix */
+(function(){
+  const el=document.getElementById("matrix");const n=MX_PEOPLE.length;
+  el.style.gridTemplateColumns=`34px repeat(${n},1fr)`;
+  const max=Math.max(...MX.flat());
+  let h=`<div class="mx-label"></div>`+MX_PEOPLE.map(p=>`<div class="mx-label">${p}</div>`).join("");
+  MX.forEach((row,a)=>{h+=`<div class="mx-label">${MX_PEOPLE[a]}</div>`;
+    row.forEach((v,b)=>{const t=v/max;
+      const bg=a===b?"#33294a0a":`rgba(18,181,160,${(0.08+t*0.92).toFixed(2)})`;
+      h+=`<div class="mx-cell" style="--md:${((a*n+b)*22)}ms;background:${bg};color:${t>0.4?"#fff":"#7a7090"}"
+        title="${MX_PEOPLE[a]} replied to ${MX_PEOPLE[b]} ${v} times">${a===b?"·":v}</div>`});});
+  el.innerHTML=h;
+})();
+
+/* guardians */
+document.getElementById("guards").innerHTML=GUARDS.map(([n1,m1,c1,n2,m2,c2,cnt])=>
+ `<div class="guard"><div class="mini-ava" style="background:${c1}">${m1}</div>
+  <div><div class="pair">${n1} <span class="arrow">←</span> ${n2}</div>
+  <small>${n2} replied ${cnt} times — their most loyal responder</small></div></div>`).join("");
+
+/* bars */
+function bars(id,data,max,suffix){document.getElementById(id).innerHTML=data.map(([name,mono,val,color])=>
+ `<div class="lb-row"><div class="ava" style="background:${color}">${mono}</div>
+  <div><div class="lb-top"><span class="lb-name">${name}</span><span class="lb-val">${val}${suffix}</span></div>
+  <div class="lb-track"><div class="lb-fill" style="--w:${(val/max*100).toFixed(1)}%;background:${color}"></div></div></div></div>`).join("")}
+bars("ignored",IGNORED,50,"%");
+bars("telugu",TELUGU,10,"%");
+
+/* reveal + counters */
+const io=new IntersectionObserver(es=>{es.forEach(en=>{
+  if(!en.isIntersecting)return;en.target.classList.add("seen");
+  en.target.querySelectorAll("[data-count]").forEach(el=>{
+    if(el.dataset.done)return;el.dataset.done="1";
+    const t9=+el.dataset.count,t0=performance.now(),dur=1500;
+    (function tk(t){const p=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-p,3);
+      el.textContent=Math.round(t9*e).toLocaleString();if(p<1)requestAnimationFrame(tk)})(t0)});
+  io.unobserve(en.target)})},{threshold:0.15});
+document.querySelectorAll(".rv, .viz-panel").forEach(el=>io.observe(el));
+
+addEventListener("scroll",()=>{const h=document.documentElement;
+  document.getElementById("progress").style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+"%"},{passive:true});
+</script>
+</body>
+</html>

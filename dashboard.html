@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Andhra Kaara Wrapped</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap');
+:root {
+  --bg:#fff6ea; --ink:#33294a; --soft:#7a7090; --white:#fff;
+  --sun:#ffb800; --coral:#ff6f61; --teal:#12b5a0; --pink:#ff8fa3;
+  --sky:#5aa9ff; --grape:#8b5cf6;
+  --mint-bg:#e2f7f0; --pink-bg:#ffe9ee; --sun-bg:#fff1cc; --sky-bg:#e7f0ff;
+  --card-border:#33294a14; --shadow:0 10px 30px #33294a14;
+  --display:"Fredoka","Comic Sans MS",sans-serif; --body:"Nunito","Segoe UI",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;overflow-x:hidden}
+.blob{position:fixed;border-radius:50%;filter:blur(70px);opacity:.5;pointer-events:none;z-index:0}
+.blob.b1{width:46vmax;height:46vmax;top:-18vmax;right:-14vmax;background:#ffd9a3}
+.blob.b2{width:38vmax;height:38vmax;bottom:-14vmax;left:-12vmax;background:#cdeee4}
+#progress{position:fixed;top:0;left:0;height:5px;width:0;z-index:100;background:linear-gradient(90deg,var(--sun),var(--coral),var(--pink),var(--teal));transition:width .1s linear}
+.topnav{position:sticky;top:12px;z-index:90;display:flex;align-items:center;gap:8px;max-width:700px;
+  margin:16px auto 0;padding:9px 14px;background:#ffffffd9;backdrop-filter:blur(12px);
+  border:2px solid var(--card-border);border-radius:99px;box-shadow:var(--shadow)}
+.topnav .brand{font-family:var(--display);font-weight:700;font-size:16px;color:var(--ink);text-decoration:none;margin-right:auto}
+.topnav a.lnk{font-weight:800;font-size:13px;color:var(--soft);text-decoration:none;padding:6px 12px;border-radius:99px;transition:all .2s}
+.topnav a.lnk:hover{background:var(--sun-bg);color:var(--ink);transform:translateY(-2px)}
+.topnav a.lnk.active{background:var(--ink);color:#fff}
+.wrap{max-width:700px;margin:0 auto;padding:0 22px 120px;position:relative;z-index:1}
+.kicker{display:inline-block;font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase;background:var(--ink);color:#fff;padding:6px 16px;border-radius:99px}
+.kicker.tealk{background:var(--teal)} .kicker.coralk{background:var(--coral)} .kicker.grapek{background:var(--grape)} .kicker.sunk{background:var(--sun);color:var(--ink)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(36px,8vw,56px);line-height:1.06;margin-top:14px}
+h2{font-family:var(--display);font-weight:600;font-size:clamp(26px,5.4vw,36px);line-height:1.15;margin:14px 0 8px}
+.dek{color:var(--soft);font-size:16.5px;max-width:52ch}
+.rainbow{background:linear-gradient(100deg,var(--coral),var(--sun) 40%,var(--teal) 75%,var(--sky));-webkit-background-clip:text;background-clip:text;color:transparent}
+.rv{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.2,.6,.2,1),transform .8s cubic-bezier(.2,.6,.2,1)}
+.rv.seen{opacity:1;transform:none}
+section{margin-top:100px;position:relative}
+.viz-panel{background:var(--white);border:2px solid var(--card-border);border-radius:28px;padding:28px 22px 18px;margin-top:34px;box-shadow:var(--shadow)}
+.viz-cap{text-align:center;color:var(--soft);font-size:13px;margin-top:12px;font-weight:600}
+.statgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:38px}
+.stat{border-radius:24px;padding:22px;background:var(--white);border:2px solid var(--card-border);box-shadow:var(--shadow);transition:transform .3s cubic-bezier(.2,1.4,.4,1)}
+.stat:hover{transform:translateY(-5px)}
+.stat b{display:block;font-family:var(--display);font-weight:700;font-size:34px;font-variant-numeric:tabular-nums}
+.stat span{font-size:13.5px;color:var(--soft);display:block;margin-top:4px;font-weight:600}
+.stat.sunbg{background:var(--sun-bg)} .stat.sunbg b{color:#c98f00}
+.stat.mintbg{background:var(--mint-bg)} .stat.mintbg b{color:var(--teal)}
+.stat.pinkbg{background:var(--pink-bg)} .stat.pinkbg b{color:var(--coral)}
+.stat.skybg{background:var(--sky-bg)} .stat.skybg b{color:var(--sky)}
+/* charts */
+#volume .vline{stroke-dasharray:2600;stroke-dashoffset:2600}
+.seen #volume .vline{animation:draw 3s cubic-bezier(.3,.5,.3,1) forwards}
+#volume .varea{opacity:0;transition:opacity 1.2s ease 1.4s}
+.seen #volume .varea{opacity:1}
+#sentline .sline{stroke-dasharray:1600;stroke-dashoffset:1600}
+.seen #sentline .sline{animation:draw 2.4s cubic-bezier(.3,.5,.3,1) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+/* heatmap */
+.hm{display:grid;gap:2.5px;margin-top:8px}
+.hm-cell{aspect-ratio:1.25;border-radius:4px;opacity:0;transform:scale(.2);transition:opacity .4s ease var(--md,0s),transform .4s cubic-bezier(.2,1.4,.4,1) var(--md,0s)}
+.seen .hm-cell{opacity:1;transform:scale(1)}
+.hm-lab{display:flex;align-items:center;font-size:9.5px;font-weight:800;color:var(--soft);justify-content:center}
+/* bars */
+.lb{margin-top:34px;display:flex;flex-direction:column;gap:13px}
+.lb-row{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center}
+.ava{width:44px;height:44px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:14px;color:#fff;box-shadow:var(--shadow)}
+.ava:hover{animation:wiggle .5s ease-in-out}
+@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-9deg)}75%{transform:rotate(9deg)}}
+.lb-top{display:flex;justify-content:space-between;margin-bottom:6px}
+.lb-name{font-weight:800;font-size:14.5px}
+.lb-val{color:var(--soft);font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+.lb-track{height:13px;border-radius:99px;background:#33294a0d;overflow:hidden}
+.lb-fill{height:100%;border-radius:99px;width:0;transition:width 1.4s cubic-bezier(.16,.8,.26,1)}
+.seen .lb-fill{width:var(--w)}
+/* stacked media bars */
+.stack-track{height:22px;border-radius:99px;background:#33294a0d;overflow:hidden;display:flex}
+.stack-seg{height:100%;width:0;transition:width 1.3s cubic-bezier(.16,.8,.26,1)}
+.seen .stack-seg{width:var(--w)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:16px}
+.legend span{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:800;color:var(--soft)}
+.legend i{width:13px;height:13px;border-radius:4px;display:inline-block}
+/* emoji podium */
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:14px;margin-top:40px}
+.pod{text-align:center;flex:1;max-width:130px}
+.pod .face{font-size:52px;display:block;animation:bounce 2.2s ease-in-out infinite}
+.pod:nth-child(1) .face{animation-delay:.3s}.pod:nth-child(3) .face{animation-delay:.6s}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.pod .block{border-radius:16px 16px 0 0;margin-top:10px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;color:#fff;font-size:20px;height:0;transition:height 1s cubic-bezier(.2,.9,.3,1.2)}
+.seen .pod .block{height:var(--h)}
+.pod .cnt{font-weight:800;font-size:13px;color:var(--soft);margin-top:8px}
+/* word cloud chips */
+.words{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:36px}
+.word{font-family:var(--display);font-weight:600;padding:.35em .8em;border-radius:99px;background:var(--white);border:2px solid var(--card-border);box-shadow:var(--shadow);opacity:0;transform:scale(.4) rotate(-6deg);transition:opacity .5s ease var(--wd,0s),transform .5s cubic-bezier(.2,1.5,.4,1) var(--wd,0s)}
+.seen .word{opacity:1;transform:scale(1) rotate(0)}
+.word:hover{animation:wiggle .5s ease-in-out}
+/* donut */
+#donut .sweep{transition:stroke-dashoffset 1.8s cubic-bezier(.3,.6,.3,1) .3s}
+.pull{font-family:var(--display);font-weight:600;font-size:clamp(21px,4.6vw,29px);line-height:1.35;text-align:center;margin:60px auto 0;max-width:26ch}
+.pull b{color:var(--coral)} .pull.teal b{color:var(--teal)}
+.foot{margin-top:100px;text-align:center;color:var(--soft);font-size:13px;line-height:2;font-weight:600}
+.foot a{color:var(--teal);font-weight:800}
+@media(max-width:560px){.statgrid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="blob b1"></div><div class="blob b2"></div>
+<div id="progress"></div>
+
+<nav class="topnav">
+  <a class="brand" href="index.html">☀️ Andhra Kaara</a>
+  <a class="lnk" href="index.html">Wrapped</a>
+  <a class="lnk active" href="dashboard.html">Dashboard</a>
+  <a class="lnk" href="roast.html">Roast Show</a>
+  <a class="lnk" href="deepdive.html">Deep Dive</a>
+</nav>
+
+<div class="wrap">
+  <header style="padding-top:60px" class="rv seen">
+    <span class="kicker tealk">The Dashboard</span>
+    <h1>Every number,<br><span class="rainbow">beautifully counted</span> 📊</h1>
+    <p class="dek" style="margin-top:14px">The full statistical portrait of the family:
+      27,651 messages · Oct 2020 – Jul 2026 · updated Jul 27, 2026.</p>
+  </header>
+
+  <!-- KPIs -->
+  <section style="margin-top:60px">
+    <div class="statgrid rv">
+      <div class="stat sunbg"><b data-count="27651">0</b><span>total messages</span></div>
+      <div class="stat mintbg"><b data-count="9415">0</b><span>media items shared</span></div>
+      <div class="stat skybg"><b data-count="2448">0</b><span>links forwarded</span></div>
+      <div class="stat pinkbg"><b data-count="578">0</b><span>messages deleted 👀</span></div>
+      <div class="stat mintbg"><b>1,957</b><span>days with at least one message (93%)</span></div>
+      <div class="stat sunbg"><b>16</b><span>family members, one unsaved 📱</span></div>
+    </div>
+  </section>
+
+  <!-- MONTHLY VOLUME -->
+  <section>
+    <span class="kicker rv">Message volume</span>
+    <h2 class="rv">Six years, month by month</h2>
+    <p class="dek rv">Watch the line draw the family's history — spikes are events,
+      valleys are exam seasons.</p>
+    <div class="viz-panel rv">
+      <svg id="volume" viewBox="0 0 560 300" width="100%"></svg>
+      <div class="viz-cap">Messages per month · the all-time peak (Sep 2022, 905 messages) was the wedding 💍</div>
+    </div>
+  </section>
+
+  <!-- HEATMAP -->
+  <section>
+    <span class="kicker coralk rv">Activity heatmap</span>
+    <h2 class="rv">The family's weekly rhythm</h2>
+    <p class="dek rv">Every hour of every weekday, six years stacked. Darker = louder.
+      Sunday night is sacred.</p>
+    <div class="viz-panel rv">
+      <div class="hm" id="heatmap"></div>
+      <div class="viz-cap">Messages by weekday × hour (phone-local time)</div>
+    </div>
+  </section>
+
+  <!-- EMOJI PODIUM -->
+  <section>
+    <span class="kicker sunk rv">Emoji championship</span>
+    <h2 class="rv">The feelings, ranked 🏆</h2>
+    <div class="viz-panel rv">
+      <div class="podium">
+        <div class="pod"><span class="face">🥳</span>
+          <div class="block" style="--h:80px;background:var(--pink)">2</div><div class="cnt">1,426 uses</div></div>
+        <div class="pod"><span class="face">😂</span>
+          <div class="block" style="--h:120px;background:var(--sun)">1</div><div class="cnt">2,095 uses</div></div>
+        <div class="pod"><span class="face">🙏🏻</span>
+          <div class="block" style="--h:58px;background:var(--teal)">3</div><div class="cnt">841 uses</div></div>
+      </div>
+      <div class="viz-cap" style="margin-top:22px">Runners-up: 👍🏻 808 · 🤣 785 · 🙏 783 · 👌🏻 756 · 💐 637 · 😍 614 · 🤪 594</div>
+    </div>
+    <p class="pull rv">Laughter first, celebration second, God a close third. <b>Perfect family ranking.</b></p>
+  </section>
+
+  <!-- WORDS -->
+  <section>
+    <span class="kicker grapek rv">The dictionary</span>
+    <h2 class="rv">Words this family lives by</h2>
+    <div class="words rv" id="words"></div>
+    <p class="pull teal rv">"Happy" — <b>1,265 times</b>. This is a celebration machine disguised as a group chat. 🎉</p>
+  </section>
+
+  <!-- MEDIA STACK -->
+  <section>
+    <span class="kicker rv">Media habits</span>
+    <h2 class="rv">What everyone actually sends 📸</h2>
+    <div class="lb rv" id="media"></div>
+    <div class="legend rv">
+      <span><i style="background:var(--sun)"></i>photos</span>
+      <span><i style="background:var(--sky)"></i>videos</span>
+      <span><i style="background:var(--pink)"></i>stickers</span>
+      <span><i style="background:var(--grape)"></i>voice &amp; GIFs</span>
+    </div>
+  </section>
+
+  <!-- REPLY SPEED -->
+  <section>
+    <span class="kicker coralk rv">Reflex test</span>
+    <h2 class="rv">Median reply speed ⚡</h2>
+    <p class="dek rv">How fast each member answers someone else in an active conversation.</p>
+    <div class="lb rv" id="speed"></div>
+  </section>
+
+  <!-- SENTIMENT -->
+  <section>
+    <span class="kicker tealk rv">The mood meter</span>
+    <h2 class="rv">90% pure positivity 💛</h2>
+    <div class="viz-panel rv" style="display:flex;flex-wrap:wrap;align-items:center;gap:20px;justify-content:center">
+      <svg id="donut" width="190" height="190" viewBox="0 0 190 190"></svg>
+      <div style="max-width:300px">
+        <p style="font-weight:700">Of 8,913 messages with detectable sentiment,
+          <b style="color:var(--teal)">8,057 are positive</b> and only 825 negative.</p>
+        <p class="viz-cap" style="text-align:left;margin-top:10px">Scored with VADER on English text —
+          Telugu messages not scored. It's science, but the fun kind.</p>
+      </div>
+    </div>
+    <div class="viz-panel rv">
+      <svg id="sentline" viewBox="0 0 560 240" width="100%"></svg>
+      <div class="viz-cap">Average positivity per quarter — six years of good vibes with mild turbulence</div>
+    </div>
+  </section>
+
+  <p class="foot">Part of <a href="index.html">Andhra Kaara — Wrapped &amp; Roasted</a> ·
+    <a href="roast.html">watch the Roast Show 🎭</a> · <a href="deepdive.html">go deeper 🔬</a><br>
+    Compiled by one very thorough computer 🤖</p>
+</div>
+
+<script>
+const MONTHLY=[41,117,105,466,262,596,319,416,256,173,481,366,278,405,444,465,773,660,531,363,258,108,238,905,659,481,363,523,307,358,318,517,388,332,513,464,381,263,454,323,347,508,762,724,461,441,459,466,335,395,246,321,183,192,320,319,304,315,460,414,287,397,368,487,393,501,296,591,377,312];
+const M0_LABELS=["2021","2022","2023","2024","2025","2026"];
+const HEAT=[[280,263,258,149,109,212,320,234,241,185,187,81,38,9,6,13,16,36,99,234,228,259,222,282],[242,205,160,160,162,186,241,191,226,237,165,63,52,12,3,13,25,44,118,307,261,280,368,439],[248,199,127,118,204,277,237,215,156,202,188,96,46,21,37,15,38,64,161,163,233,207,283,215],[287,236,183,139,186,239,218,230,348,224,168,106,62,19,3,6,11,31,89,176,232,262,252,200],[148,219,202,314,124,198,174,175,262,218,159,91,25,14,15,11,34,52,82,143,258,294,201,232],[167,162,176,197,279,213,122,180,128,213,146,115,68,14,9,7,10,51,104,146,286,368,351,297],[238,276,265,151,155,295,240,271,331,373,153,83,47,24,12,11,15,77,100,156,270,285,331,260]];
+const DOWS=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const WORDS=[["happy",1265],["day",474],["thank",460],["birthday",413],["garu",408],["god",375],["good",355],["family",296],["super",282],["bless",279],["sneha",259],["maa",256],["today",212]];
+const WCOLORS=["#ff6f61","#12b5a0","#ffb800","#8b5cf6","#5aa9ff","#ff8fa3"];
+const MEDIA=[["Appa","AP","#ffb800",[1187,624,655,18]],["Mani Anna","MA","#12b5a0",[1210,262,224,108]],["Amma","AM","#8b5cf6",[700,187,492,72]],["Sabareesh","SK","#ff6f61",[313,56,336,4]],["Ashwini","AA","#42c98d",[236,83,254,53]],["Ram","RA","#f59e5b",[350,29,15,28]]];
+const MEDIA_COLORS=["#ffb800","#5aa9ff","#ff8fa3","#8b5cf6"];
+const SPEED=[["Lakshmi ⚡","LK",58,"#ff8fa3"],["Sabareesh","SK",69,"#ff6f61"],["Sneha","SN",87,"#5aa9ff"],["Gayathri","GA",134,"#e5c454"],["Ashwini","AA",168,"#42c98d"],["Ram","RA",185,"#f59e5b"],["Mani Anna","MA",250,"#12b5a0"],["Appa","AP",254,"#ffb800"],["Amma","AM",399,"#8b5cf6"],["Priya 🎙️","PM",600,"#f08cc0"],["Krishna 🐢","KA",814,"#7a7090"]];
+const SENT_Q=[[0.68,74],[0.65,517],[0.63,433],[0.62,353],[0.59,427],[0.60,454],[0.62,237],[0.54,579],[0.55,384],[0.54,418],[0.58,352],[0.55,313],[0.53,509],[0.53,530],[0.54,415],[0.52,347],[0.61,290],[0.55,363],[0.48,338],[0.47,366],[0.49,467],[0.51,438],[0.44,206]];
+
+function fmtSec(s){return s<60?s+"s":Math.floor(s/60)+"m "+(s%60)+"s"}
+
+/* monthly volume chart */
+(function(){
+  const L=42,R=548,T=16,B=252,maxV=950;
+  const x=i=>L+i*(R-L)/(MONTHLY.length-1), y=v=>B-(v/maxV)*(B-T);
+  let g="";
+  [0,300,600,900].forEach(v=>{g+=`<line x1="${L}" y1="${y(v)}" x2="${R}" y2="${y(v)}" stroke="#33294a10" stroke-width="1.5"/>
+    <text x="${L-8}" y="${y(v)+4}" text-anchor="end" font-family="Nunito" font-weight="700" font-size="10.5" fill="#7a7090">${v}</text>`});
+  M0_LABELS.forEach((yr,k)=>{const i=3+k*12; if(i<MONTHLY.length) g+=`<text x="${x(i)}" y="${B+22}" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="11.5" fill="#7a7090">${yr}</text>`});
+  const pts=MONTHLY.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`);
+  g+=`<polygon class="varea" points="${L},${B} ${pts.join(" ")} ${R},${B}" fill="#12b5a01f"/>`;
+  g+=`<polyline class="vline" points="${pts.join(" ")}" fill="none" stroke="#12b5a0" stroke-width="3" stroke-linecap="round"/>`;
+  const pk=MONTHLY.indexOf(905);
+  g+=`<circle cx="${x(pk)}" cy="${y(905)}" r="6" fill="#ffb800" stroke="#fff" stroke-width="2.5"/>
+     <text x="${x(pk)}" y="${y(905)-12}" text-anchor="middle" font-family="Fredoka" font-weight="600" font-size="12" fill="#c98f00">the wedding 💍</text>`;
+  document.getElementById("volume").innerHTML=g;
+})();
+
+/* heatmap */
+(function(){
+  const el=document.getElementById("heatmap");
+  el.style.gridTemplateColumns=`34px repeat(24,1fr)`;
+  const max=Math.max(...HEAT.flat());
+  let h=`<div class="hm-lab"></div>`;
+  for(let c=0;c<24;c++)h+=`<div class="hm-lab">${c%6===0?c:""}</div>`;
+  HEAT.forEach((row,d)=>{
+    h+=`<div class="hm-lab">${DOWS[d]}</div>`;
+    row.forEach((v,c)=>{
+      h+=`<div class="hm-cell" style="--md:${((d*24+c)*7)}ms;background:rgba(255,111,97,${(0.06+0.94*v/max).toFixed(2)})" title="${DOWS[d]} ${c}:00 — ${v} messages"></div>`;
+    });
+  });
+  el.innerHTML=h;
+})();
+
+/* words */
+document.getElementById("words").innerHTML=WORDS.map(([w,c],i)=>
+  `<span class="word" style="--wd:${i*90}ms;font-size:${(14+(c/1265)*30).toFixed(0)}px;color:${WCOLORS[i%WCOLORS.length]};border-color:${WCOLORS[i%WCOLORS.length]}44" title="${c.toLocaleString()} times">${w} <small style="font-size:.6em;color:#7a7090">${c.toLocaleString()}</small></span>`).join("");
+
+/* media stacked bars */
+document.getElementById("media").innerHTML=MEDIA.map(([name,mono,color,vals])=>{
+  const tot=vals.reduce((a,b)=>a+b,0), maxTot=2484;
+  const segs=vals.map((v,i)=>`<div class="stack-seg" style="--w:${(v/maxTot*100).toFixed(1)}%;background:${MEDIA_COLORS[i]}" title="${v.toLocaleString()}"></div>`).join("");
+  return `<div class="lb-row"><div class="ava" style="background:${color}">${mono}</div>
+    <div><div class="lb-top"><span class="lb-name">${name}</span><span class="lb-val">${tot.toLocaleString()} items</span></div>
+    <div class="stack-track">${segs}</div></div></div>`;
+}).join("");
+
+/* reply speed */
+document.getElementById("speed").innerHTML=SPEED.map(([name,mono,sec,color])=>
+  `<div class="lb-row"><div class="ava" style="background:${color}">${mono}</div>
+   <div><div class="lb-top"><span class="lb-name">${name}</span><span class="lb-val">${fmtSec(sec)}</span></div>
+   <div class="lb-track"><div class="lb-fill" style="--w:${Math.min(100,sec/814*100).toFixed(1)}%;background:${color}"></div></div></div></div>`).join("");
+
+/* donut */
+(function(){
+  const R=70,C=2*Math.PI*R,pos=8057/8913;
+  document.getElementById("donut").innerHTML=
+   `<circle cx="95" cy="95" r="${R}" fill="none" stroke="#ff6f6133" stroke-width="26"/>
+    <circle class="sweep" cx="95" cy="95" r="${R}" fill="none" stroke="#12b5a0" stroke-width="26"
+      stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}"
+      transform="rotate(-90 95 95)" data-target="${(C*(1-pos)).toFixed(1)}"/>
+    <text x="95" y="90" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="34" fill="#12b5a0">90%</text>
+    <text x="95" y="114" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="12" fill="#7a7090">positive</text>`;
+})();
+
+/* sentiment quarterly line */
+(function(){
+  const L=44,R=548,T=16,B=196;
+  const x=i=>L+i*(R-L)/(SENT_Q.length-1), y=v=>B-((v-0.4)/0.3)*(B-T);
+  let g="";
+  [0.4,0.5,0.6,0.7].forEach(v=>{g+=`<line x1="${L}" y1="${y(v)}" x2="${R}" y2="${y(v)}" stroke="#33294a10" stroke-width="1.5"/>
+   <text x="${L-8}" y="${y(v)+4}" text-anchor="end" font-family="Nunito" font-weight="700" font-size="10.5" fill="#7a7090">${v.toFixed(1)}</text>`});
+  ["2021","2022","2023","2024","2025","2026"].forEach((yr,k)=>{const i=1+k*4;if(i<SENT_Q.length)g+=`<text x="${x(i)}" y="${B+22}" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="11.5" fill="#7a7090">${yr}</text>`});
+  const pts=SENT_Q.map(([v],i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`);
+  g+=`<polyline class="sline" points="${pts.join(" ")}" fill="none" stroke="#8b5cf6" stroke-width="3" stroke-linecap="round"/>`;
+  SENT_Q.forEach(([v],i)=>{g+=`<circle cx="${x(i)}" cy="${y(v)}" r="3.5" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>`});
+  document.getElementById("sentline").innerHTML=g;
+})();
+
+/* reveal + counters + donut trigger */
+const io=new IntersectionObserver(es=>{es.forEach(en=>{
+  if(!en.isIntersecting)return;
+  en.target.classList.add("seen");
+  en.target.querySelectorAll("[data-count]").forEach(el=>{
+    if(el.dataset.done)return; el.dataset.done="1";
+    const t9=+el.dataset.count,t0=performance.now(),dur=1500;
+    (function tk(t){const p=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-p,3);
+      el.textContent=Math.round(t9*e).toLocaleString();if(p<1)requestAnimationFrame(tk)})(t0);
+  });
+  en.target.querySelectorAll(".sweep").forEach(el=>{el.style.strokeDashoffset=el.dataset.target});
+  io.unobserve(en.target);
+})},{threshold:0.15});
+document.querySelectorAll(".rv, .viz-panel").forEach(el=>io.observe(el));
+
+addEventListener("scroll",()=>{const h=document.documentElement;
+  document.getElementById("progress").style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+"%"},{passive:true});
+</script>
+</body>
+</html>
