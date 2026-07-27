@@ -38,18 +38,32 @@ body {
   line-height: 1.65;
   overflow-x: hidden;
 }
-/* floating pastel blobs */
 .blob { position: fixed; border-radius: 50%; filter: blur(70px); opacity: .5;
   pointer-events: none; z-index: 0; }
 .blob.b1 { width: 46vmax; height: 46vmax; top: -18vmax; right: -14vmax; background: #ffd9a3; }
 .blob.b2 { width: 38vmax; height: 38vmax; bottom: -14vmax; left: -12vmax; background: #cdeee4; }
 .blob.b3 { width: 26vmax; height: 26vmax; top: 42%; right: -12vmax; background: #ffdbe3; }
 
+.sparkle { position: fixed; font-size: 13px; color: var(--sun); z-index: 0;
+  pointer-events: none; animation: twinkle var(--tdur) ease-in-out var(--tdel) infinite; }
+@keyframes twinkle { 0%,100% { opacity: .1; transform: scale(.6) rotate(0deg); }
+  50% { opacity: .9; transform: scale(1.15) rotate(25deg); } }
+
 #progress { position: fixed; top: 0; left: 0; height: 5px; width: 0; z-index: 100;
   background: linear-gradient(90deg, var(--sun), var(--coral), var(--pink), var(--teal));
   border-radius: 0 99px 99px 0; transition: width .1s linear; }
 
 .wrap { max-width: 700px; margin: 0 auto; padding: 0 22px 120px; position: relative; z-index: 1; }
+
+/* ============================ TICKER ===================================== */
+.ticker-shell { position: relative; z-index: 1; margin: 10px 0 0; overflow: hidden;
+  background: var(--ink); transform: rotate(-1.2deg) scale(1.02); padding: 12px 0; }
+.ticker { display: flex; width: max-content; animation: slide 36s linear infinite; }
+.ticker:hover { animation-play-state: paused; }
+.ticker span { font-family: var(--display); font-weight: 600; font-size: 15px;
+  color: #fff; padding: 0 26px; white-space: nowrap; }
+.ticker span b { color: var(--sun); }
+@keyframes slide { to { transform: translateX(-50%); } }
 
 /* ============================ TYPOGRAPHY ================================= */
 .kicker { display: inline-block; font-family: var(--display); font-weight: 600;
@@ -59,6 +73,7 @@ body {
 .kicker.coralk { background: var(--coral); }
 .kicker.tealk { background: var(--teal); }
 .kicker.grapek { background: var(--grape); }
+.kicker.skyk { background: var(--sky); }
 h1 { font-family: var(--display); font-weight: 700; font-size: clamp(44px, 9.5vw, 74px);
   line-height: 1.04; letter-spacing: -.01em; }
 h2 { font-family: var(--display); font-weight: 600; font-size: clamp(28px, 6vw, 40px);
@@ -73,17 +88,21 @@ h2 { font-family: var(--display); font-weight: 600; font-size: clamp(28px, 6vw, 
 .rv[data-d="1"] { transition-delay: .12s; } .rv[data-d="2"] { transition-delay: .24s; }
 .rv[data-d="3"] { transition-delay: .36s; }
 
-section { margin-top: 120px; }
+section { margin-top: 120px; position: relative; }
+.sec-emoji { position: absolute; font-size: 30px; opacity: .85; pointer-events: none;
+  animation: floaty 5.5s ease-in-out infinite; z-index: 0; }
+@keyframes floaty { 0%,100% { transform: translateY(0) rotate(-7deg); } 50% { transform: translateY(-16px) rotate(7deg); } }
 
 /* ============================ HERO ======================================= */
 .hero { min-height: 94vh; display: flex; flex-direction: column;
   justify-content: center; text-align: center; padding-top: 46px; position: relative; }
 .hero .float-emoji { position: absolute; font-size: 34px; animation: floaty 5s ease-in-out infinite; }
-@keyframes floaty { 0%,100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-16px) rotate(6deg); } }
 .hero .sub { font-family: var(--display); font-weight: 500; font-size: 19px; color: var(--soft); margin-top: 18px; }
 .hero .badge-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
 .chip { font-weight: 800; font-size: 14px; padding: 8px 18px; border-radius: 99px; background: #fff;
-  box-shadow: var(--shadow); border: 2px solid var(--card-border); }
+  box-shadow: var(--shadow); border: 2px solid var(--card-border);
+  transition: transform .25s cubic-bezier(.2,1.4,.4,1); }
+.chip:hover { transform: translateY(-4px) rotate(-2deg) scale(1.06); }
 .scroll-hint { margin-top: 60px; font-family: var(--display); font-weight: 500;
   color: var(--soft); font-size: 14px; animation: bob 2.2s ease-in-out infinite; }
 @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(9px); } }
@@ -94,7 +113,9 @@ section { margin-top: 120px; }
 .mega-label { font-family: var(--display); font-weight: 500; font-size: 20px; color: var(--ink); }
 .statgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 44px; }
 .stat { border-radius: 24px; padding: 24px 22px; background: var(--white);
-  border: 2px solid var(--card-border); box-shadow: var(--shadow); }
+  border: 2px solid var(--card-border); box-shadow: var(--shadow);
+  transition: transform .3s cubic-bezier(.2,1.4,.4,1); }
+.stat:hover { transform: translateY(-5px) rotate(-.5deg); }
 .stat b { display: block; font-family: var(--display); font-weight: 700; font-size: 36px;
   font-variant-numeric: tabular-nums; }
 .stat span { font-size: 14px; color: var(--soft); line-height: 1.5; display: block; margin-top: 4px; font-weight: 600; }
@@ -109,6 +130,8 @@ section { margin-top: 120px; }
 .ava { width: 50px; height: 50px; border-radius: 18px; display: flex; align-items: center;
   justify-content: center; font-family: var(--display); font-weight: 700; font-size: 16px;
   color: #fff; flex-shrink: 0; box-shadow: var(--shadow); }
+.ava:hover { animation: wiggle .5s ease-in-out; }
+@keyframes wiggle { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-9deg); } 75% { transform: rotate(9deg); } }
 .lb-body { min-width: 0; }
 .lb-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
 .lb-name { font-weight: 800; font-size: 15.5px; }
@@ -133,9 +156,12 @@ section { margin-top: 120px; }
 /* ============================ ROAST DOSSIERS ============================= */
 .dossier { position: relative; background: var(--white); border: 2px solid var(--card-border);
   border-radius: 28px; padding: 30px 28px 26px; margin-top: 30px;
-  box-shadow: var(--shadow); overflow: hidden; }
+  box-shadow: var(--shadow); overflow: hidden;
+  transition: transform .35s cubic-bezier(.2,1.3,.4,1), box-shadow .35s ease; }
 .dossier:nth-of-type(odd) { transform: rotate(-.6deg); }
 .dossier:nth-of-type(even) { transform: rotate(.6deg); }
+.dossier:hover { transform: rotate(0deg) translateY(-6px) scale(1.012);
+  box-shadow: 0 18px 44px #33294a22; }
 .dossier.spotlight { border: 3px solid var(--accent, var(--coral)); }
 .d-head { display: flex; gap: 16px; align-items: center; margin-bottom: 14px; }
 .d-head .ava { width: 60px; height: 60px; font-size: 20px; border-radius: 22px; }
@@ -159,11 +185,26 @@ section { margin-top: 120px; }
 .viz-panel { background: var(--white); border: 2px solid var(--card-border); border-radius: 28px;
   padding: 30px 22px 20px; margin-top: 38px; box-shadow: var(--shadow); }
 .viz-cap { text-align: center; color: var(--soft); font-size: 13.5px; margin-top: 12px; font-weight: 600; }
-#net .edge { stroke-dasharray: 420; stroke-dashoffset: 420; stroke-linecap: round; }
+#net .edge, #trend .tline { stroke-dasharray: 1400; stroke-dashoffset: 1400; stroke-linecap: round; }
 .seen #net .edge { animation: draw 1.6s cubic-bezier(.3,.6,.3,1) forwards; }
+.seen #trend .tline { animation: draw 2.2s cubic-bezier(.3,.5,.3,1) forwards; }
 @keyframes draw { to { stroke-dashoffset: 0; } }
+#trend .dot { opacity: 0; transition: opacity .4s ease; }
+.seen #trend .dot { opacity: 1; }
 #clock .arc { opacity: 0; transition: opacity .5s ease; }
 .seen #clock .arc { opacity: 1; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 14px; }
+.legend span { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 800; }
+.legend i { width: 14px; height: 14px; border-radius: 5px; display: inline-block; }
+
+/* heatmap matrix */
+.matrix { display: grid; gap: 3px; margin-top: 8px; }
+.mx-cell { aspect-ratio: 1; border-radius: 7px; display: flex; align-items: center;
+  justify-content: center; font-size: 10.5px; font-weight: 800; color: #fff;
+  opacity: 0; transform: scale(.3); transition: opacity .45s ease var(--md, 0s), transform .45s cubic-bezier(.2,1.4,.4,1) var(--md, 0s); }
+.seen .mx-cell { opacity: 1; transform: scale(1); }
+.mx-label { display: flex; align-items: center; justify-content: center;
+  font-size: 10.5px; font-weight: 800; color: var(--soft); }
 
 .timeline { display: grid; grid-template-columns: 1fr 2.2fr 1.4fr; gap: 12px; margin-top: 38px; }
 .era { border-radius: 22px; padding: 18px 16px; background: var(--white);
@@ -175,18 +216,22 @@ section { margin-top: 120px; }
 /* ============================ CALENDAR =================================== */
 .cal { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 38px; }
 .cal-card { background: var(--white); border: 2px solid var(--card-border); border-radius: 22px;
-  padding: 20px 12px; text-align: center; box-shadow: var(--shadow); }
+  padding: 20px 12px; text-align: center; box-shadow: var(--shadow);
+  transition: transform .3s cubic-bezier(.2,1.4,.4,1); }
+.cal-card:hover { transform: translateY(-5px) rotate(1.5deg); }
 .cal-card .d { font-family: var(--display); font-weight: 700; font-size: 22px; color: var(--teal); }
 .cal-card .who { font-size: 13.5px; margin-top: 3px; font-weight: 800; }
 .cal-card .n { font-size: 11.5px; color: var(--soft); margin-top: 5px; font-weight: 600; }
 .cal-card.mystery { background: var(--pink-bg); border: 2px dashed var(--coral); }
 .cal-card.mystery .d { color: var(--coral); }
+.cal-card.mystery:hover { animation: wiggle .5s ease-in-out; }
 
 /* ============================ CASE FILES ================================= */
 .case { display: grid; grid-template-columns: 70px 1fr; gap: 18px; margin-top: 42px; align-items: start; }
 .case .glyph { width: 62px; height: 62px; border-radius: 22px; background: var(--white);
   border: 2px solid var(--card-border); box-shadow: var(--shadow);
   display: flex; align-items: center; justify-content: center; font-size: 30px; }
+.case:hover .glyph { animation: wiggle .5s ease-in-out; }
 .case h3 { font-family: var(--display); font-weight: 600; font-size: 22px; margin-bottom: 6px; }
 .case p { font-size: 15.5px; color: #554d6e; }
 .case b { color: var(--coral); }
@@ -237,9 +282,15 @@ section { margin-top: 120px; }
     </div>
     <div class="scroll-hint rv" data-d="3">scroll down, if you dare 👇</div>
   </header>
+</div>
 
+<!-- ============================ TICKER ================================== -->
+<div class="ticker-shell"><div class="ticker" id="ticker"></div></div>
+
+<div class="wrap">
   <!-- ============================ CH 1 ================================== -->
   <section>
+    <span class="sec-emoji" style="top:-30px; right:4%">📈</span>
     <span class="kicker rv">Chapter 1 · The Numbers</span>
     <h2 class="rv" data-d="1">This family never, ever stops talking</h2>
     <div style="margin-top:50px" class="rv" data-d="2">
@@ -258,6 +309,7 @@ section { margin-top: 120px; }
 
   <!-- ============================ CH 2 ================================== -->
   <section>
+    <span class="sec-emoji" style="top:-26px; left:2%; animation-delay:1s">🗣️</span>
     <span class="kicker coralk rv">Chapter 2 · The Talkers</span>
     <h2 class="rv" data-d="1">Who actually runs this group</h2>
     <div class="lb rv" data-d="2" id="talkers"></div>
@@ -266,6 +318,7 @@ section { margin-top: 120px; }
 
   <!-- ============================ CH 3 ================================== -->
   <section>
+    <span class="sec-emoji" style="top:-30px; right:6%; animation-delay:.6s">🔥</span>
     <span class="kicker grapek rv">Chapter 3 · The Roast</span>
     <h2 class="rv" data-d="1">The algorithm has filed charges 🔥</h2>
 
@@ -338,7 +391,6 @@ section { margin-top: 120px; }
         <span class="receipt">today's bulletin: 4:19 AM</span><span class="receipt">most ignored 🪦</span></div>
     </div>
 
-    <!-- ============ THE SPOTLIGHT ROASTS ============ -->
     <p class="pull grape rv" style="margin-top:70px">And now, the algorithm requests<br>
       <b>special attention</b> for three individuals. 🎯</p>
 
@@ -407,10 +459,11 @@ section { margin-top: 120px; }
 
   <!-- ============================ CH 4 ================================== -->
   <section>
+    <span class="sec-emoji" style="top:-28px; left:3%; animation-delay:1.4s">🫀</span>
     <span class="kicker tealk rv">Chapter 4 · The Power Map</span>
     <h2 class="rv" data-d="1">One person holds this family together</h2>
     <p class="dek rv" data-d="2">Every reply mapped — who answers whom, within the hour.
-      Thicker line = stronger bond.</p>
+      Thicker line = stronger bond. Watch the map draw itself.</p>
     <div class="viz-panel rv" data-d="2">
       <svg id="net" viewBox="0 0 340 314" width="100%" role="img" aria-label="Family reply network"></svg>
       <div class="viz-cap">Mani Anna is the #1 responder for Appa, Amma, Sabareesh <i>and</i> Ram.
@@ -424,9 +477,56 @@ section { margin-top: 120px; }
     <p class="pull rv">A man who joined in 2024 dethroned a <b>four-year dynasty</b> in twelve months flat.</p>
   </section>
 
-  <!-- ============================ CH 5 ================================== -->
+  <!-- ============================ CH 5 · DEEP DIVE ====================== -->
   <section>
-    <span class="kicker rv">Chapter 5 · The Heartbeat</span>
+    <span class="sec-emoji" style="top:-30px; right:4%; animation-delay:.4s">🔬</span>
+    <span class="kicker skyk rv">Chapter 5 · The Deep Dive</span>
+    <h2 class="rv" data-d="1">The rise, the fall, the receipts 📊</h2>
+    <p class="dek rv" data-d="2">Messages per person per year. Watch six years of family
+      politics draw themselves: the Appa dynasty, Ram's meteoric arrival, and the
+      Mystery Number's tragic disappearance.</p>
+
+    <div class="viz-panel rv" data-d="2">
+      <svg id="trend" viewBox="0 0 560 320" width="100%" role="img" aria-label="Yearly messages per person"></svg>
+      <div class="legend" id="trendLegend"></div>
+      <div class="viz-cap">Messages sent per year, top 6 members · 2026 is January–July only</div>
+    </div>
+
+    <h2 class="rv" style="margin-top:80px">Who replies to whom 💬</h2>
+    <p class="dek rv" data-d="1">Every square = how often the row-person replied to the
+      column-person within an hour. Darker teal = stronger bond. Watch it pop in.</p>
+    <div class="viz-panel rv" data-d="2">
+      <div class="matrix" id="matrix"></div>
+      <div class="viz-cap">The hottest lane in the family: Sabareesh → Mani Anna, 495 replies.
+        The coldest: Ram ↔ Mystery Number, 3 replies in six years. 🥶</div>
+    </div>
+
+    <h2 class="rv" style="margin-top:80px">The left-on-read graveyard 🪦</h2>
+    <p class="dek rv" data-d="1">Share of each member's conversation-openers that got ZERO
+      reply within six hours. Pour one out for the 4 AM bulletins.</p>
+    <div class="lb rv" data-d="2" id="ignored"></div>
+
+    <h2 class="rv" style="margin-top:80px">The mother-tongue meter 🗣️</h2>
+    <p class="dek rv" data-d="1">Percentage of each member's messages containing Telugu script.
+      A perfect generational staircase — the language lives upstairs.</p>
+    <div class="lb rv" data-d="2" id="telugu"></div>
+
+    <div class="statgrid rv" style="margin-top:60px">
+      <div class="stat skybg"><b>242</b><span>messages in the single longest conversation
+        (Mar 20, 2022 — 141 minutes, 8 people, zero chill)</span></div>
+      <div class="stat sunbg"><b>3.4</b><span>average messages per conversation — this family
+        prefers hit-and-run communication</span></div>
+      <div class="stat pinkbg"><b>13m 34s</b><span>Krishna Attimber's median reply time.
+        Replies to "good morning" by lunch 🐢</span></div>
+      <div class="stat mintbg"><b>58</b><span>voice notes from Priya Manni, because typing
+        is for other people 🎙️</span></div>
+    </div>
+  </section>
+
+  <!-- ============================ CH 6 ================================== -->
+  <section>
+    <span class="sec-emoji" style="top:-26px; left:5%; animation-delay:2s">⏰</span>
+    <span class="kicker rv">Chapter 6 · The Heartbeat</span>
     <h2 class="rv" data-d="1">When the family comes alive 🕐</h2>
     <p class="dek rv" data-d="2">All 27,651 messages on a 24-hour clock. Two daily surges —
       morning devotions and the late-night assembly — and total silence during nap hours.</p>
@@ -437,9 +537,10 @@ section { margin-top: 120px; }
     <p class="pull teal rv">Longest streak: <b>114 straight days</b> without one day of silence. 🔥</p>
   </section>
 
-  <!-- ============================ CH 6 ================================== -->
+  <!-- ============================ CH 7 ================================== -->
   <section>
-    <span class="kicker coralk rv">Chapter 6 · The Calendar</span>
+    <span class="sec-emoji" style="top:-30px; right:8%; animation-delay:1.2s">🎂</span>
+    <span class="kicker coralk rv">Chapter 7 · The Calendar</span>
     <h2 class="rv" data-d="1">The computer found everyone's birthday.<br>From wishes alone. 🎂</h2>
     <p class="dek rv" data-d="2">Dates where "happy birthday" bursts repeat every single year.
       Nobody told the algorithm a single date.</p>
@@ -460,9 +561,10 @@ section { margin-top: 120px; }
       after six years. The 2027 season will be intense.</p>
   </section>
 
-  <!-- ============================ CH 7 ================================== -->
+  <!-- ============================ CH 8 ================================== -->
   <section>
-    <span class="kicker grapek rv">Chapter 7 · Detective Corner</span>
+    <span class="sec-emoji" style="top:-28px; left:4%; animation-delay:.9s">🔍</span>
+    <span class="kicker grapek rv">Chapter 8 · Detective Corner</span>
     <h2 class="rv" data-d="1">Mysteries the data solved 🔍</h2>
 
     <div class="case rv"><div class="glyph">💍</div><div>
@@ -478,11 +580,10 @@ section { margin-top: 120px; }
         193 of the 250 were photos and videos, led by Lakshmi and Ashwini Akka. Essentially
         a live TV van, but it's your family.</p></div></div>
 
-    <div class="case rv"><div class="glyph">🗣️</div><div>
-      <h3>The retreating mother tongue</h3>
-      <p>Telugu script by generation: Amma <b>8.7%</b> of messages, Appa 7.4%, Mani Anna 5.7% —
-        then a cliff — the youngest: basically <b>0%</b>. A whole language shift, visible in
-        one family's group chat.</p></div></div>
+    <div class="case rv"><div class="glyph">👻</div><div>
+      <h3>The four-day comet</h3>
+      <p>A second unsaved number appeared in January 2021, dumped <b>160 photos and videos
+        in four days</b>, and was never seen again. Astronomers are still tracking it.</p></div></div>
 
     <div class="case rv"><div class="glyph">🏆</div><div>
       <h3>The most loyal member</h3>
@@ -492,7 +593,7 @@ section { margin-top: 120px; }
 
   <!-- ============================ VERDICT =============================== -->
   <section class="verdict rv" id="verdictSec">
-    <span class="kicker tealk">Chapter 8 · The Verdict</span>
+    <span class="kicker tealk">Chapter 9 · The Verdict</span>
     <p class="pull" style="margin-top:40px">The most-used word in six years is <b>"happy"</b> — 1,265 times.<br>
       90% of everything this family says is positive. 💛</p>
     <p class="dek" style="margin:24px auto 0; text-align:center">The sentence: continue exactly as you are.</p>
@@ -512,20 +613,127 @@ const TALKERS = [
   ["Ram Attimber","RA",2713,"#f59e5b"], ["Mystery No. 📱","?",2028,"#5aa9ff"],
   ["Ashwini Akka","AA",1579,"#42c98d"], ["Lakshmi","LK",867,"#ff8fa3"],
 ];
+const IGNORED = [
+  ["Ram Attimber 🪦","RA",36.6,"#f59e5b"], ["Appa","AP",33.7,"#ffb800"],
+  ["Mani Anna","MA",33.2,"#12b5a0"], ["Sabareesh","SK",28.6,"#ff6f61"],
+  ["Mystery No. 📱","?",25.2,"#5aa9ff"], ["Amma","AM",23.4,"#8b5cf6"],
+  ["Ashwini Akka","AA",17.7,"#42c98d"], ["Gayathri 👑","GA",6.7,"#e5c454"],
+];
+const TELUGU = [
+  ["Amma","AM",8.7,"#8b5cf6"], ["Appa","AP",7.4,"#ffb800"],
+  ["Mani Anna","MA",5.7,"#12b5a0"], ["Ashwini Akka","AA",1.1,"#42c98d"],
+  ["Lakshmi","LK",0.6,"#ff8fa3"], ["Sabareesh","SK",0.2,"#ff6f61"],
+  ["Ram Attimber","RA",0.05,"#f59e5b"],
+];
 const BY_HOUR = [1610,1560,1371,1228,1219,1620,1552,1496,1692,1652,1166,635,
                  338,113,85,76,149,355,753,1325,1768,1955,2008,1925];
+const YEARS = ["2020","2021","2022","2023","2024","2025","2026*"];
+const TRENDS = [
+  ["Appa", "#ffb800", [78,948,1263,1305,1218,615,445]],
+  ["Mani Anna", "#12b5a0", [90,944,1039,851,1030,846,549]],
+  ["Amma", "#8b5cf6", [28,537,871,623,705,391,268]],
+  ["Sabareesh", "#ff6f61", [31,479,786,503,586,390,312]],
+  ["Ram Attimber", "#f59e5b", [null,null,null,null,625,1056,1032]],
+  ["Mystery No.", "#5aa9ff", [0,377,437,752,462,0,0]],
+];
+const MX_PEOPLE = ["AP","MA","AM","SK","RA","📱","AA","LK"];
+const MX = [
+  [0,492,382,298,175,218,160,97],
+  [480,0,432,426,234,112,150,82],
+  [360,439,0,209,121,129,130,66],
+  [294,495,181,0,83,116,104,90],
+  [139,206,120,88,0,1,20,23],
+  [212,102,106,88,2,0,68,63],
+  [147,131,130,115,24,63,0,84],
+  [92,68,79,125,27,56,101,0],
+];
+const FACTS = [
+  "📊 <b>27,651</b> messages analyzed", "😂 top emoji used <b>2,095</b> times",
+  "👑 Appa = <b>21%</b> of the whole chat", "⚡ Lakshmi replies in <b>58 seconds</b>",
+  "📖 Amma averages <b>31.4</b> words per message", "🌙 Appa once sent <b>157 messages at 3 AM</b> — alone",
+  "🎂 <b>415</b> birthday wishes delivered", "🕵️ June 25 birthday: still <b>UNSOLVED</b>",
+  "📱 the Mystery Number: <b>2,028</b> messages, saved by nobody",
+  "🔥 <b>114-day</b> unbroken chat streak", "💍 the record day was a <b>wedding</b>",
+  "🪦 Ram's bulletins ignored <b>36.6%</b> of the time",
+];
 
-/* ============================ LEADERBOARD ================================ */
-document.getElementById("talkers").innerHTML = TALKERS.map(([name, mono, val, color]) => `
-  <div class="lb-row">
-    <div class="ava" style="background:${color}">${mono}</div>
-    <div class="lb-body">
-      <div class="lb-top"><span class="lb-name">${name}</span>
-        <span class="lb-val">${val.toLocaleString()}</span></div>
-      <div class="lb-track"><div class="lb-fill"
-        style="--w:${(val / TALKERS[0][2] * 100).toFixed(1)}%;background:${color}"></div></div>
-    </div>
-  </div>`).join("");
+/* ============================ TICKER ===================================== */
+const tick = FACTS.map(f => `<span>${f}</span>`).join("");
+document.getElementById("ticker").innerHTML = tick + tick;
+
+/* ============================ LEADERBOARDS =============================== */
+function leaderboard(id, data, max, suffix) {
+  document.getElementById(id).innerHTML = data.map(([name, mono, val, color]) => `
+    <div class="lb-row">
+      <div class="ava" style="background:${color}">${mono}</div>
+      <div class="lb-body">
+        <div class="lb-top"><span class="lb-name">${name}</span>
+          <span class="lb-val">${val.toLocaleString()}${suffix}</span></div>
+        <div class="lb-track"><div class="lb-fill"
+          style="--w:${(val / max * 100).toFixed(1)}%;background:${color}"></div></div>
+      </div>
+    </div>`).join("");
+}
+leaderboard("talkers", TALKERS, TALKERS[0][2], "");
+leaderboard("ignored", IGNORED, 50, "%");
+leaderboard("telugu", TELUGU, 10, "%");
+
+/* ============================ TREND CHART ================================ */
+(function trend() {
+  const svg = document.getElementById("trend");
+  const L = 46, R = 545, T = 18, B = 282, maxY = 1400;
+  const x = i => L + i * (R - L) / (YEARS.length - 1);
+  const y = v => B - (v / maxY) * (B - T);
+  let g = "";
+  [0, 350, 700, 1050, 1400].forEach(v => {
+    g += `<line x1="${L}" y1="${y(v)}" x2="${R}" y2="${y(v)}" stroke="#33294a12" stroke-width="1.5"/>
+          <text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-family="Nunito,sans-serif"
+           font-weight="700" font-size="11" fill="#7a7090">${v}</text>`;
+  });
+  YEARS.forEach((yr, i) => {
+    g += `<text x="${x(i)}" y="${B + 22}" text-anchor="middle" font-family="Nunito,sans-serif"
+          font-weight="800" font-size="12" fill="#7a7090">${yr}</text>`;
+  });
+  TRENDS.forEach(([name, color, vals]) => {
+    const pts = vals.map((v, i) => v === null ? null : `${x(i)},${y(v)}`).filter(Boolean);
+    g += `<polyline class="tline" points="${pts.join(" ")}" fill="none"
+          stroke="${color}" stroke-width="3.5" opacity="0.9"/>`;
+    vals.forEach((v, i) => {
+      if (v === null) return;
+      g += `<circle class="dot" style="transition-delay:${1200 + i * 140}ms"
+            cx="${x(i)}" cy="${y(v)}" r="4.5" fill="${color}" stroke="#fff" stroke-width="2"/>`;
+    });
+  });
+  // annotations
+  g += `<text x="${x(4)}" y="${y(625) - 14}" text-anchor="middle" font-family="Fredoka,sans-serif"
+        font-weight="600" font-size="11.5" fill="#e07b39">Ram arrives 🚀</text>`;
+  g += `<text x="${x(4) + 26}" y="${y(462) + 26}" text-anchor="middle" font-family="Fredoka,sans-serif"
+        font-weight="600" font-size="11.5" fill="#5aa9ff">last seen 👻</text>`;
+  svg.innerHTML = g;
+  document.getElementById("trendLegend").innerHTML = TRENDS.map(([name, color]) =>
+    `<span><i style="background:${color}"></i>${name}</span>`).join("");
+})();
+
+/* ============================ REPLY MATRIX =============================== */
+(function matrix() {
+  const el = document.getElementById("matrix");
+  const n = MX_PEOPLE.length;
+  el.style.gridTemplateColumns = `34px repeat(${n}, 1fr)`;
+  const max = Math.max(...MX.flat());
+  let html = `<div class="mx-label"></div>` +
+    MX_PEOPLE.map(p => `<div class="mx-label">${p}</div>`).join("");
+  MX.forEach((row, a) => {
+    html += `<div class="mx-label">${MX_PEOPLE[a]}</div>`;
+    row.forEach((v, b) => {
+      const t = v / max;
+      const bg = a === b ? "#33294a0a" : `rgba(18,181,160,${(0.08 + t * 0.92).toFixed(2)})`;
+      const fg = t > 0.4 ? "#fff" : "#7a7090";
+      html += `<div class="mx-cell" style="--md:${((a * n + b) * 22)}ms;background:${bg};color:${fg}"
+        title="${MX_PEOPLE[a]} replied to ${MX_PEOPLE[b]} ${v} times">${a === b ? "·" : v}</div>`;
+    });
+  });
+  el.innerHTML = html;
+})();
 
 /* ============================ NETWORK SVG ================================ */
 (function network() {
@@ -550,6 +758,11 @@ document.getElementById("talkers").innerHTML = TALKERS.map(([name, mono, val, co
     g += `<path class="edge" d="M${hub.x},${hub.y} L${n.x},${n.y}"
           stroke="${n.c}" stroke-width="${(n.w / 972 * 8 + 1.5).toFixed(1)}" opacity="0.8" fill="none"/>`;
   });
+  // pulsing ring on the hub
+  g += `<circle cx="${hub.x}" cy="${hub.y}" r="${hub.r}" fill="none" stroke="#12b5a0" stroke-width="2">
+          <animate attributeName="r" values="${hub.r};${hub.r + 16};${hub.r}" dur="2.6s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.7;0;0.7" dur="2.6s" repeatCount="indefinite"/>
+        </circle>`;
   nodes.forEach(n => {
     g += `<circle cx="${n.x}" cy="${n.y}" r="${n.r}" fill="${n.c}"
            ${n.hub ? 'stroke="#33294a" stroke-width="2.5"' : ""}/>` +
@@ -585,6 +798,17 @@ document.getElementById("talkers").innerHTML = TALKERS.map(([name, mono, val, co
   g += `<text x="${cx}" y="${cy + 5}" text-anchor="middle" font-family="Fredoka,sans-serif"
         font-weight="600" font-size="13" fill="#33294a">24 hrs</text>`;
   svg.innerHTML = g;
+})();
+
+/* ============================ SPARKLES =================================== */
+(function sparkles() {
+  let html = "";
+  for (let i = 0; i < 16; i++) {
+    html += `<span class="sparkle" style="left:${(Math.random() * 96 + 2).toFixed(1)}%;
+      top:${(Math.random() * 92 + 4).toFixed(1)}%;
+      --tdur:${(2.4 + Math.random() * 3).toFixed(2)}s; --tdel:${(Math.random() * 3).toFixed(2)}s">✦</span>`;
+  }
+  document.body.insertAdjacentHTML("afterbegin", html);
 })();
 
 /* ============================ CONFETTI =================================== */
