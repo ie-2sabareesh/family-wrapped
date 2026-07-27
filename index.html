@@ -1,0 +1,598 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The People vs. Andhra Kaara</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ============================ FOUNDATION ================================= */
+:root {
+  --ink: #0b0a12;
+  --panel: #161320;
+  --panel-2: #1d1929;
+  --line: #2b2540;
+  --cream: #f2ead8;
+  --muted: #8f87a3;
+  --gold: #e6b950;
+  --gold-soft: #e6b95022;
+  --coral: #ff7a6e;
+  --mint: #56d6c4;
+  --lav: #a78bfa;
+  --red: #ff5470;
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --sans: "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+/* ambient glows */
+body::before, body::after {
+  content: ""; position: fixed; z-index: 0; pointer-events: none;
+  width: 70vmax; height: 70vmax; border-radius: 50%;
+}
+body::before { top: -35vmax; right: -25vmax;
+  background: radial-gradient(circle, #e6b95012 0%, transparent 60%); }
+body::after { bottom: -40vmax; left: -25vmax;
+  background: radial-gradient(circle, #a78bfa10 0%, transparent 60%); }
+/* film grain */
+.grain { position: fixed; inset: 0; z-index: 50; pointer-events: none; opacity: .05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); }
+
+#progress { position: fixed; top: 0; left: 0; height: 3px; width: 0;
+  background: linear-gradient(90deg, var(--gold), var(--coral)); z-index: 100;
+  transition: width .1s linear; }
+
+.wrap { max-width: 680px; margin: 0 auto; padding: 0 22px 110px; position: relative; z-index: 1; }
+
+/* ============================ TYPOGRAPHY ================================= */
+.kicker { font-family: var(--sans); font-size: 11px; font-weight: 700;
+  letter-spacing: .32em; text-transform: uppercase; color: var(--gold); }
+h1 { font-family: var(--serif); font-weight: 900; font-size: clamp(42px, 9vw, 68px);
+  line-height: 1.02; letter-spacing: -.01em; }
+h2 { font-family: var(--serif); font-weight: 700; font-size: clamp(30px, 6vw, 42px);
+  line-height: 1.1; margin: 10px 0 8px; }
+.dek { color: var(--muted); font-size: 16px; max-width: 46ch; }
+.chapter-rule { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.chapter-rule .num { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--gold); }
+.chapter-rule .rule { flex: 1; height: 1px; background: var(--line); }
+
+/* ============================ REVEAL ENGINE ============================== */
+.rv { opacity: 0; transform: translateY(36px); transition: opacity .9s cubic-bezier(.2,.6,.2,1), transform .9s cubic-bezier(.2,.6,.2,1); }
+.rv.seen { opacity: 1; transform: none; }
+.rv[data-d="1"] { transition-delay: .12s; } .rv[data-d="2"] { transition-delay: .24s; }
+.rv[data-d="3"] { transition-delay: .36s; } .rv[data-d="4"] { transition-delay: .48s; }
+
+section { margin-top: 130px; }
+
+/* ============================ HERO ======================================= */
+.hero { min-height: 92vh; display: flex; flex-direction: column;
+  justify-content: center; text-align: center; padding-top: 40px; }
+.hero .scales { font-size: 46px; margin-bottom: 26px; }
+.hero h1 .vs { display: block; font-style: italic; font-weight: 300;
+  font-size: .38em; color: var(--muted); margin: 10px 0; letter-spacing: .1em; }
+.hero h1 .fam { color: var(--gold); }
+.hero .dek { margin: 26px auto 0; }
+.hero .scroll-hint { margin-top: 64px; color: var(--muted); font-size: 12px;
+  letter-spacing: .25em; text-transform: uppercase; animation: bob 2.4s ease-in-out infinite; }
+@keyframes bob { 0%,100% { transform: translateY(0); opacity:.55 } 50% { transform: translateY(8px); opacity:1 } }
+
+/* ============================ STATS ====================================== */
+.mega { font-family: var(--serif); font-weight: 900; font-size: clamp(72px, 16vw, 120px);
+  line-height: 1; color: var(--cream);
+  font-variant-numeric: tabular-nums; }
+.mega-label { font-family: var(--serif); font-style: italic; font-size: 19px; color: var(--gold); margin-top: 4px; }
+.statgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+  background: var(--line); border: 1px solid var(--line); border-radius: 18px;
+  overflow: hidden; margin-top: 44px; }
+.stat { background: var(--panel); padding: 26px 22px; }
+.stat b { display: block; font-family: var(--serif); font-weight: 700; font-size: 34px;
+  font-variant-numeric: tabular-nums; }
+.stat span { font-size: 13px; color: var(--muted); line-height: 1.45; display: block; margin-top: 4px; }
+.stat.hot b { color: var(--coral); } .stat.cool b { color: var(--mint); }
+.stat.gold b { color: var(--gold); } .stat.lav b { color: var(--lav); }
+
+/* ============================ LEADERBOARD ================================ */
+.lb { margin-top: 40px; display: flex; flex-direction: column; gap: 14px; }
+.lb-row { display: grid; grid-template-columns: 46px 1fr; gap: 14px; align-items: center; }
+.ava { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-weight: 700; font-size: 15px; color: var(--ink);
+  font-family: var(--sans); flex-shrink: 0; }
+.lb-body { min-width: 0; }
+.lb-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
+.lb-name { font-weight: 600; font-size: 15px; }
+.lb-val { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px; }
+.lb-track { height: 10px; border-radius: 99px; background: var(--panel-2); overflow: hidden; }
+.lb-fill { height: 100%; border-radius: 99px; width: 0;
+  transition: width 1.4s cubic-bezier(.16,.8,.26,1); }
+.seen .lb-fill { width: var(--w); }
+.pull { font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: clamp(22px, 4.6vw, 30px); line-height: 1.35; text-align: center;
+  margin: 64px auto 0; max-width: 24ch; }
+.pull b { color: var(--gold); font-weight: 700; }
+.pull.mint b { color: var(--mint); }
+
+/* ============================ ROAST DOSSIERS ============================= */
+.dossier { position: relative; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 20px; padding: 30px 28px 26px; margin-top: 26px; overflow: hidden; }
+.dossier::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: var(--accent, var(--gold)); }
+.d-head { display: flex; gap: 16px; align-items: center; margin-bottom: 14px; }
+.d-head .ava { width: 54px; height: 54px; font-size: 18px; }
+.d-ex { font-size: 10px; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); }
+.d-name { font-family: var(--serif); font-weight: 700; font-size: 26px; line-height: 1.15; }
+.d-title { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--accent, var(--gold)); }
+.d-body { font-size: 15.5px; }
+.d-body b { color: var(--cream); }
+.d-evidence { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line);
+  font-size: 12.5px; color: var(--mint); letter-spacing: .02em; }
+.d-evidence::before { content: "EVIDENCE — "; color: var(--muted); font-weight: 700; letter-spacing: .18em; }
+.stamp { position: absolute; top: 22px; right: 20px; padding: 5px 13px;
+  border: 2.5px solid var(--red); border-radius: 7px; color: var(--red);
+  font-weight: 800; font-size: 12px; letter-spacing: .22em; text-transform: uppercase;
+  transform: rotate(9deg) scale(3); opacity: 0;
+  transition: all .4s cubic-bezier(.2,1.1,.3,1.25) .75s; }
+.seen .stamp { transform: rotate(9deg) scale(1); opacity: 1; }
+
+/* ============================ NETWORK ==================================== */
+.viz-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 20px;
+  padding: 30px 20px 18px; margin-top: 36px; }
+.viz-cap { text-align: center; color: var(--muted); font-size: 12.5px; margin-top: 12px; }
+#net path { stroke-linecap: round; }
+#net .edge { stroke-dasharray: 400; stroke-dashoffset: 400; }
+.seen #net .edge { animation: draw 1.6s cubic-bezier(.3,.6,.3,1) forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+#net text { font-family: var(--sans); }
+.timeline { display: grid; grid-template-columns: 1fr 2.2fr 1.4fr; gap: 10px; margin-top: 36px; }
+.era { border-radius: 14px; padding: 16px 14px; background: var(--panel); border: 1px solid var(--line); }
+.era .yrs { font-family: var(--serif); font-weight: 700; font-size: 18px; }
+.era .who { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+.era.mani { border-top: 3px solid var(--mint); }
+.era.appa { border-top: 3px solid var(--gold); }
+.era.ram  { border-top: 3px solid var(--coral); }
+
+/* ============================ CLOCK ====================================== */
+#clock .spoke { transform-origin: 150px 150px; }
+#clock .arc { opacity: 0; transition: opacity .5s ease; }
+.seen #clock .arc { opacity: 1; }
+
+/* ============================ CALENDAR =================================== */
+.cal { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 36px; }
+.cal-card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+  padding: 18px 14px; text-align: center; }
+.cal-card .d { font-family: var(--serif); font-weight: 700; font-size: 21px; color: var(--gold); }
+.cal-card .who { font-size: 13px; margin-top: 3px; }
+.cal-card .n { font-size: 11.5px; color: var(--muted); margin-top: 5px; }
+.cal-card.mystery { border-color: var(--coral); background: #ff7a6e0d; }
+.cal-card.mystery .d { color: var(--coral); }
+
+/* ============================ CASE FILES ================================= */
+.case { display: grid; grid-template-columns: 64px 1fr; gap: 18px; margin-top: 40px; align-items: start; }
+.case .glyph { font-size: 34px; text-align: center; line-height: 1.2; padding-top: 3px; }
+.case h3 { font-family: var(--serif); font-size: 21px; font-weight: 700; margin-bottom: 6px; }
+.case p { font-size: 15px; color: #cfc8dd; }
+.case b { color: var(--gold); }
+
+/* ============================ VERDICT ==================================== */
+.verdict { text-align: center; position: relative; padding: 30px 0 10px; }
+.verdict .pull { margin-top: 34px; }
+.big-stamp { display: inline-block; margin-top: 52px; padding: 16px 30px;
+  border: 3.5px solid var(--mint); border-radius: 10px; color: var(--mint);
+  font-weight: 800; font-size: clamp(17px, 4vw, 24px); letter-spacing: .24em;
+  text-transform: uppercase; transform: rotate(-4deg) scale(3); opacity: 0;
+  transition: all .5s cubic-bezier(.2,1.1,.3,1.2) .5s; }
+.seen .big-stamp { transform: rotate(-4deg) scale(1); opacity: 1; }
+.confetti { position: absolute; top: -10px; width: 9px; height: 15px; border-radius: 2px;
+  opacity: 0; pointer-events: none; }
+.seen .confetti { animation: fall var(--dur) ease-in var(--delay) forwards; }
+@keyframes fall {
+  0% { opacity: 1; transform: translateY(0) rotate(0); }
+  100% { opacity: 0; transform: translateY(560px) rotate(720deg); }
+}
+.foot { margin-top: 120px; text-align: center; color: var(--muted); font-size: 12.5px; line-height: 2; }
+.foot .langs { letter-spacing: .18em; text-transform: uppercase; font-size: 10.5px; }
+
+@media (max-width: 560px) {
+  .statgrid { grid-template-columns: 1fr 1fr; }
+  .cal { grid-template-columns: 1fr 1fr; }
+  .timeline { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div id="progress"></div>
+
+<div class="wrap">
+
+  <!-- ============================ HERO ================================== -->
+  <header class="hero">
+    <div class="scales rv">⚖️</div>
+    <h1 class="rv" data-d="1">The People<span class="vs">— versus —</span><span class="fam">Andhra Kaara</span></h1>
+    <p class="dek rv" data-d="2">Six years of family chat, cross-examined by an unusually
+      judgemental computer. 27,651 messages. Sixteen suspects. No mercy.</p>
+    <div class="scroll-hint rv" data-d="3">scroll to begin the trial ↓</div>
+  </header>
+
+  <!-- ============================ CH 1 ================================== -->
+  <section>
+    <div class="chapter-rule rv"><span class="num">Chapter 01</span><div class="rule"></div></div>
+    <span class="kicker rv">The Evidence</span>
+    <h2 class="rv" data-d="1">The numbers don't lie.<br>The family just doesn't read them.</h2>
+    <div style="margin-top:54px" class="rv" data-d="2">
+      <div class="mega" data-count="27651">0</div>
+      <div class="mega-label">messages entered into evidence</div>
+    </div>
+    <div class="statgrid rv" data-d="3">
+      <div class="stat cool"><b data-count="9415">0</b><span>photos, videos &amp; stickers exchanged</span></div>
+      <div class="stat gold"><b>93%</b><span>of 2,099 days had at least one message</span></div>
+      <div class="stat lav"><b data-count="8099">0</b><span>separate conversations detected</span></div>
+      <div class="stat hot"><b>64.5%</b><span>of them were one person talking to absolutely nobody</span></div>
+      <div class="stat hot"><b data-count="578">0</b><span>messages deleted before anyone could screenshot</span></div>
+      <div class="stat cool"><b data-count="415">0</b><span>birthday wishes faithfully delivered</span></div>
+    </div>
+  </section>
+
+  <!-- ============================ CH 2 ================================== -->
+  <section>
+    <div class="chapter-rule rv"><span class="num">Chapter 02</span><div class="rule"></div></div>
+    <span class="kicker rv">The Suspects</span>
+    <h2 class="rv" data-d="1">Ranked by volume of noise</h2>
+    <div class="lb rv" data-d="2" id="talkers"></div>
+    <p class="pull rv">Appa alone is <b>21%</b> of this entire group chat. One message in five. Let that sink in.</p>
+  </section>
+
+  <!-- ============================ CH 3 ================================== -->
+  <section>
+    <div class="chapter-rule rv"><span class="num">Chapter 03</span><div class="rule"></div></div>
+    <span class="kicker rv">The Charges</span>
+    <h2 class="rv" data-d="1">Everyone is guilty of something</h2>
+
+    <div class="dossier rv" style="--accent:var(--gold)">
+      <div class="stamp">Guilty</div>
+      <div class="d-head"><div class="ava" style="background:var(--gold)">AP</div>
+        <div><div class="d-ex">Exhibit A</div><div class="d-name">Appa</div>
+        <div class="d-title">The Midnight Broadcaster</div></div></div>
+      <div class="d-body">5,872 messages. 695 conversations started. 198 quietly deleted.
+        And on August 2, 2024 at 3 AM, he performed his masterpiece:
+        <b>157 consecutive messages</b>, alone, in the dark, to a sleeping family.
+        A full concert for an empty stadium.</div>
+      <div class="d-evidence">the single loudest hour in six years of family history — all his.</div>
+    </div>
+
+    <div class="dossier rv" style="--accent:var(--mint)">
+      <div class="stamp">Guilty</div>
+      <div class="d-head"><div class="ava" style="background:var(--mint)">MA</div>
+        <div><div class="d-ex">Exhibit B</div><div class="d-name">Mani Anna</div>
+        <div class="d-title">Laughs Loudest At His Own Jokes</div></div></div>
+      <div class="d-body">6,893 emojis deployed — <b>1,326 of them the crying-laughing face</b>,
+        statistically mostly at his own jokes. Also filed one single message of
+        2,073 words in December 2023. Nobody has finished it. There will be a quiz.</div>
+      <div class="d-evidence">appears every 1.4 days without fail. most loyal. most unhinged.</div>
+    </div>
+
+    <div class="dossier rv" style="--accent:var(--lav)">
+      <div class="stamp">Guilty</div>
+      <div class="d-head"><div class="ava" style="background:var(--lav)">AM</div>
+        <div><div class="d-ex">Exhibit C</div><div class="d-name">Amma</div>
+        <div class="d-title">The Paragraph Machine</div></div></div>
+      <div class="d-body">Averages <b>31.4 words per message</b> — triple the family norm.
+        Others send "good morning." Amma publishes the full morning edition,
+        with editorials, a devotional supplement, and a weather section.</div>
+      <div class="d-evidence">one 1,949-word message from june 2022 remains in print.</div>
+    </div>
+
+    <div class="dossier rv" style="--accent:var(--coral)">
+      <div class="stamp">Guilty</div>
+      <div class="d-head"><div class="ava" style="background:var(--coral)">SK</div>
+        <div><div class="d-ex">Exhibit D</div><div class="d-name">Sabareesh</div>
+        <div class="d-title">The Speed Grump</div></div></div>
+      <div class="d-body">Replies in <b>69 seconds</b>, day or night — then spends just 7.5 words.
+        Always online, emotionally on airplane mode. Holds the certified
+        <b>lowest positivity score</b> in the family. We measured. Twice. Out of kindness.</div>
+      <div class="d-evidence">1,563 lightning replies. zero warmth detected.</div>
+    </div>
+
+    <div class="dossier rv" style="--accent:var(--gold)">
+      <div class="stamp">Guilty</div>
+      <div class="d-head"><div class="ava" style="background:#f59e5b">RA</div>
+        <div><div class="d-ex">Exhibit E</div><div class="d-name">Ram Attimber</div>
+        <div class="d-title">The 4 AM News Agency</div></div></div>
+      <div class="d-body">Joined in 2024. Was the <b>#1 most active member by 2025</b>. Zero warm-up laps.
+        Delivers breaking news before the newspapers wake up — and is left on read
+        <b>36.6% of the time</b>, the highest rate in the family. The news must go on.</div>
+      <div class="d-evidence">this morning's bulletin was filed at 04:19.</div>
+    </div>
+
+    <div class="dossier rv" style="--accent:var(--mint)">
+      <div class="stamp">Guilty</div>
+      <div class="d-head"><div class="ava" style="background:#f08cc0">LS</div>
+        <div><div class="d-ex">Exhibit F</div><div class="d-name">Lakshmi &amp; Sneha</div>
+        <div class="d-title">The Sticker Syndicate</div></div></div>
+      <div class="d-body">Lakshmi replies in <b>58 seconds</b> — fastest in the family — then says 3.6 words.
+        Sneha's longest message in six years is 30 words, yet she is the
+        <b>most-mentioned name in the chat</b> (259 times). Most talked about,
+        least talking. Textbook celebrity.</div>
+      <div class="d-evidence">470 stickers between them. words are for other people.</div>
+    </div>
+
+    <div class="dossier rv" style="--accent:var(--lav)">
+      <div class="stamp">Guilty</div>
+      <div class="d-head"><div class="ava" style="background:#8ee08e">GA</div>
+        <div><div class="d-ex">Exhibit G</div><div class="d-name">Gayathri Akka</div>
+        <div class="d-title">The Birthday Department</div></div></div>
+      <div class="d-body">Top three emojis: cake, chocolate, bouquet. Longest message ever:
+        <b>seventeen words</b>. She materializes for celebrations, performs the rites,
+        and dematerializes. But when she speaks, only 6.7% get ignored — the lowest
+        in the family. <b>Scarcity is power.</b></div>
+      <div class="d-evidence">110 cakes · 107 chocolates · 104 bouquets.</div>
+    </div>
+
+    <div class="dossier rv" style="--accent:var(--coral)">
+      <div class="stamp">Guilty</div>
+      <div class="d-head"><div class="ava" style="background:#6bc5ff">?</div>
+        <div><div class="d-ex">Exhibit H</div><div class="d-name">+91 87••• •••92</div>
+        <div class="d-title">The Unsaved Legend</div></div></div>
+      <div class="d-body"><b>2,028 messages across six years.</b> Wished. Blessed. Forwarded. Laughed.
+        And in six entire years, not one family member spent the four seconds needed
+        to save the contact. Then, in 2025 — silence. Vanished. The family's greatest
+        unsolved case.</div>
+      <div class="d-evidence">everyone knows exactly who this is. nobody will commit.</div>
+    </div>
+  </section>
+
+  <!-- ============================ CH 4 ================================== -->
+  <section>
+    <div class="chapter-rule rv"><span class="num">Chapter 04</span><div class="rule"></div></div>
+    <span class="kicker rv">The Power Structure</span>
+    <h2 class="rv" data-d="1">We mapped every reply.<br>One name is the center of everything.</h2>
+    <p class="dek rv" data-d="2">Every "who answered whom within the hour" — thousands of reply pairs,
+      drawn as a map. The thicker the line, the stronger the bond.</p>
+
+    <div class="viz-panel rv" data-d="2">
+      <svg id="net" viewBox="0 0 340 314" width="100%" role="img" aria-label="Family reply network"></svg>
+      <div class="viz-cap">Mani Anna is the #1 responder for Appa, Amma, Sabareesh <i>and</i> Ram.
+        Whoever speaks — he answers. He <i>is</i> the group chat.</div>
+    </div>
+
+    <div class="timeline rv">
+      <div class="era mani"><div class="yrs">2020</div><div class="who">Mani Anna era</div></div>
+      <div class="era appa"><div class="yrs">2021 – 2024</div><div class="who">The Appa dynasty 👑 — four straight championships</div></div>
+      <div class="era ram"><div class="yrs">2025 – 26</div><div class="who">Ram's takeover 📰</div></div>
+    </div>
+    <p class="pull rv">A man who joined in 2024 dethroned a <b>four-year dynasty</b> in twelve months flat.</p>
+
+    <div class="lb rv" id="ignored" style="margin-top:56px"></div>
+    <p class="viz-cap rv">Share of each member's conversation-openers that received zero reply within six hours 🪦</p>
+  </section>
+
+  <!-- ============================ CH 5 ================================== -->
+  <section>
+    <div class="chapter-rule rv"><span class="num">Chapter 05</span><div class="rule"></div></div>
+    <span class="kicker rv">The Body Clock</span>
+    <h2 class="rv" data-d="1">This family has a heartbeat</h2>
+    <p class="dek rv" data-d="2">All 27,651 messages arranged around a 24-hour clock.
+      The family surges twice a day — morning devotions and the late-night assembly —
+      and sleeps precisely when Indian afternoons turn hot.</p>
+    <div class="viz-panel rv" data-d="2">
+      <svg id="clock" viewBox="0 0 300 300" width="100%" style="max-width:360px;display:block;margin:0 auto"></svg>
+      <div class="viz-cap">Messages by hour (phone-local time) · peak hour: 22:00 with 2,008 messages</div>
+    </div>
+    <p class="pull mint rv">The longest streak: <b>114 consecutive days</b> without a single day of silence.</p>
+  </section>
+
+  <!-- ============================ CH 6 ================================== -->
+  <section>
+    <div class="chapter-rule rv"><span class="num">Chapter 06</span><div class="rule"></div></div>
+    <span class="kicker rv">The Calendar</span>
+    <h2 class="rv" data-d="1">The computer reverse-engineered<br>every birthday. From wishes alone.</h2>
+    <p class="dek rv" data-d="2">Dates where "happy birthday" bursts repeat year after year,
+      matched to whoever gets named in the wishes. Nobody told it a single date.</p>
+    <div class="cal rv" data-d="2">
+      <div class="cal-card"><div class="d">Feb 4</div><div class="who">Ashwini / Priya</div><div class="n">32 wishes · 6 yrs</div></div>
+      <div class="cal-card mystery"><div class="d">Jun 25</div><div class="who"><b>??? 🕵️</b></div><div class="n">31 wishes · unsolved</div></div>
+      <div class="cal-card"><div class="d">May 16</div><div class="who">Sabareesh</div><div class="n">28 wishes · 6 yrs</div></div>
+      <div class="cal-card"><div class="d">Apr 15</div><div class="who">Lakshmi</div><div class="n">26 wishes · 6 yrs</div></div>
+      <div class="cal-card"><div class="d">Apr 19</div><div class="who">Ram</div><div class="n">26 wishes · 5 yrs</div></div>
+      <div class="cal-card"><div class="d">Feb 27</div><div class="who">Ram / Ashwini</div><div class="n">25 wishes · 5 yrs</div></div>
+      <div class="cal-card"><div class="d">Apr 27</div><div class="who">Sneha</div><div class="n">22 wishes · 6 yrs</div></div>
+      <div class="cal-card"><div class="d">Oct 8</div><div class="who">Amma</div><div class="n">19 wishes · 5 yrs</div></div>
+      <div class="cal-card"><div class="d">Nov 19</div><div class="who">Mani</div><div class="n">14 wishes · 3 yrs</div></div>
+    </div>
+    <p class="pull rv">June 25: <b>31 wishes across five years</b> and the algorithm cannot identify the birthday person. Family — solve this at dinner.</p>
+    <p class="pull mint rv">Birthday-wishing championship: <b>Mani Anna 57, Amma 56</b>. One wish apart after six years. The 2027 season will be intense.</p>
+  </section>
+
+  <!-- ============================ CH 7 ================================== -->
+  <section>
+    <div class="chapter-rule rv"><span class="num">Chapter 07</span><div class="rule"></div></div>
+    <span class="kicker rv">Detective Corner</span>
+    <h2 class="rv" data-d="1">Cases closed by data</h2>
+
+    <div class="case rv"><div class="glyph">💍</div><div>
+      <h3>The September 2022 explosion — solved</h3>
+      <p>The two biggest days in family history happened back-to-back: Sep 4 (<b>322 messages</b>)
+        and Sep 5 (202). Top words: <i>muhurtham, pics, looks, marriage, mahalaya, vakyam</i>.
+        A wedding match was being discussed and its date fixed from the panchang —
+        with Amma firing 113 messages in a single day. One wedding, two all-time records.</p></div></div>
+
+    <div class="case rv"><div class="glyph">🌕</div><div>
+      <h3>The full-moon broadcast</h3>
+      <p>The #2 day ever (Mar 20, 2022 — <b>250 messages</b>) was an Arunachala full-moon visit:
+        193 of the 250 messages were photos and videos, led by Lakshmi and Ashwini Akka.
+        Essentially a live outside-broadcast van, but it's your family.</p></div></div>
+
+    <div class="case rv"><div class="glyph">🗣️</div><div>
+      <h3>The retreating mother tongue</h3>
+      <p>Telugu script by generation: Amma <b>8.7%</b> of messages, Appa 7.4%, Mani Anna 5.7% —
+        then a cliff — the younger generation, effectively <b>0%</b>. A whole language shift,
+        visible in one family's group chat.</p></div></div>
+
+    <div class="case rv"><div class="glyph">📱</div><div>
+      <h3>The vanishing</h3>
+      <p>The unsaved +91 number peaked at 752 messages in 2023, then went completely silent
+        from 2025. Changed numbers? Left the country? The data ends; the mystery doesn't.</p></div></div>
+  </section>
+
+  <!-- ============================ VERDICT =============================== -->
+  <section class="verdict rv" id="verdictSec">
+    <div class="chapter-rule"><span class="num">Chapter 08</span><div class="rule"></div></div>
+    <span class="kicker">The Final Verdict</span>
+    <p class="pull">The most-used word in six years is <b>"happy"</b> — 1,265 times.<br>
+      Ninety percent of everything this family says is positive.</p>
+    <p class="dek" style="margin:26px auto 0; text-align:center">The sentence: continue exactly as you are.</p>
+    <div class="big-stamp">Guilty of being wholesome</div>
+  </section>
+
+  <p class="foot">Compiled from the family's own 27,651 messages by a very judgemental computer.<br>
+    <span class="langs">Python · SQL · PowerShell · TypeScript · HTML · CSS · JavaScript</span><br>
+    Made with love, evidence, and mild judgement · Oct 2020 – Jul 2026</p>
+</div>
+
+<script>
+/* ============================ DATA ======================================= */
+const TALKERS = [
+  ["Appa","AP",5872,"#e6b950"], ["Mani Anna","MA",5349,"#56d6c4"],
+  ["Amma","AM",3423,"#a78bfa"], ["Sabareesh","SK",3087,"#ff7a6e"],
+  ["Ram Attimber","RA",2713,"#f59e5b"], ["Mystery No.","?",2028,"#6bc5ff"],
+  ["Ashwini Akka","AA",1579,"#8ee08e"], ["Lakshmi","LK",867,"#f08cc0"],
+];
+const IGNORED = [
+  ["Ram Attimber","RA",36.6,"#f59e5b"], ["Appa","AP",33.7,"#e6b950"],
+  ["Mani Anna","MA",33.2,"#56d6c4"], ["Sabareesh","SK",28.6,"#ff7a6e"],
+  ["Mystery No.","?",25.2,"#6bc5ff"], ["Amma","AM",23.4,"#a78bfa"],
+  ["Ashwini Akka","AA",17.7,"#8ee08e"], ["Gayathri","GA",6.7,"#f0d98c"],
+];
+const BY_HOUR = [1610,1560,1371,1228,1219,1620,1552,1496,1692,1652,1166,635,
+                 338,113,85,76,149,355,753,1325,1768,1955,2008,1925];
+
+/* ============================ LEADERBOARDS =============================== */
+function leaderboard(id, data, max, suffix) {
+  const el = document.getElementById(id);
+  el.innerHTML = data.map(([name, mono, val, color]) => `
+    <div class="lb-row">
+      <div class="ava" style="background:${color}">${mono}</div>
+      <div class="lb-body">
+        <div class="lb-top"><span class="lb-name">${name}</span>
+          <span class="lb-val">${val.toLocaleString()}${suffix}</span></div>
+        <div class="lb-track"><div class="lb-fill"
+          style="--w:${(val / max * 100).toFixed(1)}%;background:${color}"></div></div>
+      </div>
+    </div>`).join("");
+}
+leaderboard("talkers", TALKERS, TALKERS[0][2], "");
+leaderboard("ignored", IGNORED, 50, "%");
+
+/* ============================ NETWORK SVG ================================ */
+(function network() {
+  const svg = document.getElementById("net");
+  const cx = 170, cy = 152;
+  const nodes = [
+    { id: "MA", label: "Mani Anna", x: cx, y: cy, r: 30, c: "#56d6c4", hub: true },
+    { id: "AP", label: "Appa",      x: 60,  y: 62,  r: 24, c: "#e6b950", w: 972 },
+    { id: "AM", label: "Amma",      x: 282, y: 66,  r: 21, c: "#a78bfa", w: 871 },
+    { id: "SK", label: "Sabareesh", x: 296, y: 210, r: 20, c: "#ff7a6e", w: 921 },
+    { id: "RA", label: "Ram",       x: 52,  y: 218, r: 18, c: "#f59e5b", w: 440 },
+    { id: "AA", label: "Ashwini",   x: 118, y: 272, r: 14, c: "#8ee08e", w: 281 },
+    { id: "LK", label: "Lakshmi",   x: 226, y: 274, r: 13, c: "#f08cc0", w: 150 },
+  ];
+  const hub = nodes[0];
+  let g = "";
+  // secondary lanes (faint): Appa-Amma 742, Appa-Sab 592
+  const faint = [[1, 2, 742], [1, 3, 592]];
+  faint.forEach(([a, b, w]) => {
+    g += `<path class="edge" d="M${nodes[a].x},${nodes[a].y} Q${cx},${cy - 90} ${nodes[b].x},${nodes[b].y}"
+          stroke="#8f87a3" stroke-width="${(w / 972 * 7).toFixed(1)}" fill="none" opacity="0.22"/>`;
+  });
+  nodes.slice(1).forEach(n => {
+    g += `<path class="edge" d="M${hub.x},${hub.y} L${n.x},${n.y}"
+          stroke="${n.c}" stroke-width="${(n.w / 972 * 8 + 1.5).toFixed(1)}" opacity="0.75" fill="none"/>`;
+  });
+  nodes.forEach(n => {
+    g += `<circle cx="${n.x}" cy="${n.y}" r="${n.r}" fill="${n.c}"
+           ${n.hub ? 'stroke="#f2ead8" stroke-width="2.5"' : ""}/>` +
+         `<text x="${n.x}" y="${n.y + 4}" text-anchor="middle"
+           font-size="${n.hub ? 13 : 10.5}" font-weight="700" fill="#0b0a12">${n.id}</text>` +
+         `<text x="${n.x}" y="${n.y + n.r + 15}" text-anchor="middle"
+           font-size="10" fill="#8f87a3">${n.label}</text>`;
+  });
+  svg.innerHTML = g;
+})();
+
+/* ============================ RADIAL CLOCK =============================== */
+(function clock() {
+  const svg = document.getElementById("clock");
+  const cx = 150, cy = 150, r0 = 52, rMax = 88;
+  const max = Math.max(...BY_HOUR);
+  let g = `<circle cx="${cx}" cy="${cy}" r="${r0 - 8}" fill="none" stroke="#2b2540" stroke-width="1"/>`;
+  BY_HOUR.forEach((v, h) => {
+    const a0 = (h / 24) * 2 * Math.PI - Math.PI / 2 + 0.02;
+    const a1 = ((h + 1) / 24) * 2 * Math.PI - Math.PI / 2 - 0.02;
+    const rr = r0 + (v / max) * rMax;
+    const peak = v === max;
+    const p = (a, r) => `${(cx + r * Math.cos(a)).toFixed(1)},${(cy + r * Math.sin(a)).toFixed(1)}`;
+    g += `<path class="arc" style="transition-delay:${(h * 45)}ms"
+      d="M${p(a0, r0)} L${p(a0, rr)} A${rr},${rr} 0 0 1 ${p(a1, rr)} L${p(a1, r0)} A${r0},${r0} 0 0 0 ${p(a0, r0)} Z"
+      fill="${peak ? "#e6b950" : "#56d6c4"}" opacity="${peak ? 1 : (0.25 + 0.6 * v / max).toFixed(2)}"/>`;
+  });
+  [0, 6, 12, 18].forEach(h => {
+    const a = (h / 24) * 2 * Math.PI - Math.PI / 2;
+    g += `<text x="${(cx + (r0 - 22) * Math.cos(a)).toFixed(1)}" y="${(cy + (r0 - 22) * Math.sin(a) + 4).toFixed(1)}"
+          text-anchor="middle" font-size="11" fill="#8f87a3">${h}</text>`;
+  });
+  g += `<text x="${cx}" y="${cy + 4}" text-anchor="middle" font-family="Fraunces,serif"
+        font-style="italic" font-size="13" fill="#f2ead8">24 hrs</text>`;
+  svg.innerHTML = g;
+})();
+
+/* ============================ CONFETTI =================================== */
+(function confetti() {
+  const sec = document.getElementById("verdictSec");
+  const colors = ["#e6b950", "#ff7a6e", "#56d6c4", "#a78bfa", "#f08cc0"];
+  let html = "";
+  for (let i = 0; i < 90; i++) {
+    html += `<div class="confetti" style="left:${(Math.random() * 100).toFixed(1)}%;
+      background:${colors[i % colors.length]};
+      --dur:${(2.6 + Math.random() * 2.4).toFixed(2)}s; --delay:${(Math.random() * 1.6).toFixed(2)}s;
+      transform:rotate(${Math.floor(Math.random() * 360)}deg)"></div>`;
+  }
+  sec.insertAdjacentHTML("afterbegin", html);
+})();
+
+/* ============================ REVEAL + COUNTERS ========================== */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    en.target.classList.add("seen");
+    en.target.querySelectorAll("[data-count]").forEach(el => {
+      if (el.dataset.done) return;
+      el.dataset.done = "1";
+      const target = +el.dataset.count, t0 = performance.now(), dur = 1600;
+      (function tick(t) {
+        const p = Math.min(1, (t - t0) / dur), ease = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(target * ease).toLocaleString();
+        if (p < 1) requestAnimationFrame(tick);
+      })(t0);
+    });
+    io.unobserve(en.target);
+  });
+}, { threshold: 0.18 });
+document.querySelectorAll(".rv").forEach(el => io.observe(el));
+
+/* scroll progress bar */
+addEventListener("scroll", () => {
+  const h = document.documentElement;
+  document.getElementById("progress").style.width =
+    (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + "%";
+}, { passive: true });
+</script>
+</body>
+</html>
