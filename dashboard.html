@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -36,6 +36,12 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16p
 .topnav a.lnk{font-weight:800;font-size:13px;color:var(--soft);text-decoration:none;padding:6px 12px;border-radius:99px;transition:all .2s}
 .topnav a.lnk:hover{background:var(--sun-bg);color:var(--ink);transform:translateY(-2px)}
 .topnav a.lnk.active{background:var(--ink);color:#fff}
+@media(max-width:640px){
+  .topnav{margin-left:12px;margin-right:12px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .topnav::-webkit-scrollbar{display:none}
+  .topnav .brand{display:none}
+  .topnav a.lnk{flex-shrink:0}
+}
 .wrap{max-width:700px;margin:0 auto;padding:0 22px 120px;position:relative;z-index:1}
 .kicker{display:inline-block;font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase;background:var(--ink);color:#fff;padding:6px 16px;border-radius:99px}
 .kicker.tealk{background:var(--teal)} .kicker.coralk{background:var(--coral)} .kicker.grapek{background:var(--grape)} .kicker.sunk{background:var(--sun);color:var(--ink)}

@@ -71,6 +71,13 @@ body {
   padding: 6px 12px; border-radius: 99px; transition: all .2s; }
 .topnav a.lnk:hover { background: var(--sun-bg); color: var(--ink); transform: translateY(-2px); }
 .topnav a.lnk.active { background: var(--ink); color: #fff; }
+@media (max-width: 640px) {
+  .topnav { margin-left: 12px; margin-right: 12px; overflow-x: auto;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .topnav::-webkit-scrollbar { display: none; }
+  .topnav .brand { display: none; }
+  .topnav a.lnk { flex-shrink: 0; }
+}
 
 .explore { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 48px; }
 .exp-card { display: block; text-decoration: none; color: var(--ink); background: var(--white);
