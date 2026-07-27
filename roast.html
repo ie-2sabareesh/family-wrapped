@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Roast Show — Andhra Kaara</title>
+<title>The Roast Show â€” Andhra Kaara</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap');
 :root {
@@ -87,87 +87,88 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16p
 <div class="blob b1"></div><div class="blob b2"></div>
 
 <nav class="topnav">
-  <a class="brand" href="index.html">☀️ Andhra Kaara</a>
+  <a class="brand" href="index.html">â˜€ï¸ Andhra Kaara</a>
   <a class="lnk" href="index.html">Wrapped</a>
   <a class="lnk" href="dashboard.html">Dashboard</a>
   <a class="lnk active" href="roast.html">Roast Show</a>
   <a class="lnk" href="deepdive.html">Deep Dive</a>
+  <a class="lnk" href="deepdive.html#recommendations">Memos 📋</a>
 </nav>
 
 <div class="wrap">
-  <div class="meta"><span>🎭 The Roast Show</span><span id="counter">Act 1</span></div>
+  <div class="meta"><span>ðŸŽ­ The Roast Show</span><span id="counter">Act 1</span></div>
   <div class="stage" id="stage"></div>
   <div class="controls">
-    <button class="btn ghost" id="prev">← Back</button>
-    <button class="btn primary" id="next">Begin the trial 🔨</button>
+    <button class="btn ghost" id="prev">â† Back</button>
+    <button class="btn primary" id="next">Begin the trial ðŸ”¨</button>
     <div class="dots" id="dots"></div>
   </div>
-  <p class="hint">use ← → arrow keys, or tap the dots · every stat is real</p>
+  <p class="hint">use â† â†’ arrow keys, or tap the dots Â· every stat is real</p>
 </div>
 
 <script>
 const ACTS=[
- {kick:"CASE No. 2020-1026 · THE PEOPLE vs. ANDHRA KAARA",ava:"⚖️",avaBg:"#33294a",
+ {kick:"CASE No. 2020-1026 Â· THE PEOPLE vs. ANDHRA KAARA",ava:"âš–ï¸",avaBg:"#33294a",
   name:"The Family Trial",title:"Eleven acts. Sixteen suspects. Zero mercy.",acc:"#8b5cf6",cbg:"#e7f0ff",
   chips:["27,651 exhibits","6 years of evidence","everything computed twice"],
   lines:["An impartial algorithm has read this family's entire chat history. Every message. Every sticker. Every 4 AM forward.",
-   "No family member influenced these findings. The computer alone is responsible — it even convicted the person who ran it.",
+   "No family member influenced these findings. The computer alone is responsible â€” it even convicted the person who ran it.",
    "Nobody is innocent. Press next to meet the accused."],stamp:"Court is in session"},
  {kick:"Exhibit A",ava:"AP",avaBg:"#ffb800",name:"Appa",title:"The Midnight Broadcaster",acc:"#c98f00",cbg:"#fff1cc",
-  chips:["5,872 msgs — 21% of everything","695 convos started","198 deleted 👀"],
+  chips:["5,872 msgs â€” 21% of everything","695 convos started","198 deleted ðŸ‘€"],
   lines:["One out of every five messages in this family's history is Appa. The group chat is legally his personal radio station.",
    "On Aug 2, 2024 at 3 AM he sent <b>157 consecutive messages</b> while everyone slept. Nobody replied. A concert for an empty stadium.",
    "And the 198 deleted messages? What did you type, Appa? What did the family almost see?"],stamp:"Guilty"},
  {kick:"Exhibit B",ava:"MA",avaBg:"#12b5a0",name:"Mani Anna",title:"Laughs Loudest At His Own Jokes",acc:"#12b5a0",cbg:"#e2f7f0",
-  chips:["6,893 emojis","😂 ×1,326","one 2,073-word message"],
+  chips:["6,893 emojis","ðŸ˜‚ Ã—1,326","one 2,073-word message"],
   lines:["Has used the crying-laughing emoji <b>1,326 times</b>. Forensics suggest at least a thousand were for his own jokes.",
    "In December 2023 he sent a single message of 2,073 words. That is not a text. That is a dissertation. Nobody has finished it.",
-   "He also shows up every 1.4 days without fail — the most loyal member. Loyal, and completely unhinged."],stamp:"Guilty"},
+   "He also shows up every 1.4 days without fail â€” the most loyal member. Loyal, and completely unhinged."],stamp:"Guilty"},
  {kick:"Exhibit C",ava:"AM",avaBg:"#8b5cf6",name:"Amma",title:"The Paragraph Machine",acc:"#8b5cf6",cbg:"#e7f0ff",
-  chips:["31.4 words per message","3× the family average","record: 1,949 words"],
+  chips:["31.4 words per message","3Ã— the family average","record: 1,949 words"],
   lines:["The rest of the family texts 'good morning'. Amma publishes the morning edition, with editorials and a devotional supplement.",
-   "Her average message is <b>31.4 words</b> — triple anyone else. She does not text. She narrates.",
+   "Her average message is <b>31.4 words</b> â€” triple anyone else. She does not text. She narrates.",
    "Remember her 1,949-word record. It becomes a weapon two acts from now."],stamp:"Guilty"},
  {kick:"Exhibit D",ava:"SK",avaBg:"#ff6f61",name:"Sabareesh",title:"The Speed Grump",acc:"#ff6f61",cbg:"#ffe9ee",
-  chips:["69-second replies","7.5 words average","lowest positivity score 🥇"],
+  chips:["69-second replies","7.5 words average","lowest positivity score ðŸ¥‡"],
   lines:["Replies in <b>69 seconds</b> at any hour of any day. Always online. The court questions his lifestyle.",
    "All that speed delivers an average of 7.5 words. Lightning fast, emotionally unavailable.",
-   "And the algorithm's crown finding: the <b>lowest positivity score in the entire family</b>. Certified grumpiest. Yes — the computer convicted its own operator. Impartiality hurts."],stamp:"Guilty"},
+   "And the algorithm's crown finding: the <b>lowest positivity score in the entire family</b>. Certified grumpiest. Yes â€” the computer convicted its own operator. Impartiality hurts."],stamp:"Guilty"},
  {kick:"Exhibit E",ava:"RA",avaBg:"#f59e5b",name:"Ram Attimber",title:"The 4 AM News Agency",acc:"#e07b39",cbg:"#fff1cc",
-  chips:["joined 2024 → #1 by 2025","2,713 bulletins","ignored 36.6% 🪦"],
+  chips:["joined 2024 â†’ #1 by 2025","2,713 bulletins","ignored 36.6% ðŸª¦"],
   lines:["Sent his first message in 2024. Twelve months later he had dethroned a four-year Appa dynasty. Zero warm-up laps.",
-   "Delivers breaking news before the newspapers wake up — today's bulletin was filed at <b>4:19 AM</b>.",
+   "Delivers breaking news before the newspapers wake up â€” today's bulletin was filed at <b>4:19 AM</b>.",
    "The price of pre-dawn journalism: left on read <b>36.6%</b> of the time. The highest rate in the family. The news must go on."],stamp:"Guilty"},
- {kick:"Exhibit F · Spotlight",ava:"LK",avaBg:"#ff8fa3",name:"Lakshmi",title:"Fighter-Pilot Reflexes, Fortune-Cookie Vocabulary",acc:"#ff6f61",cbg:"#ffe9ee",
-  chips:["58-second replies ⚡","3.6 words average","250 stickers"],
-  lines:["Replies in <b>58 seconds</b> — the fastest fingers in the family. And what do those record reflexes deliver? <b>3.6 words.</b> That's not a reply, that's a receipt.",
+ {kick:"Exhibit F Â· Spotlight",ava:"LK",avaBg:"#ff8fa3",name:"Lakshmi",title:"Fighter-Pilot Reflexes, Fortune-Cookie Vocabulary",acc:"#ff6f61",cbg:"#ffe9ee",
+  chips:["58-second replies âš¡","3.6 words average","250 stickers"],
+  lines:["Replies in <b>58 seconds</b> â€” the fastest fingers in the family. And what do those record reflexes deliver? <b>3.6 words.</b> That's not a reply, that's a receipt.",
    "Visits the group once every 6.8 days, like a landlord inspecting the property. Drops a sticker. Vanishes.",
-   "The archive contains exactly ONE real message from her: 151 words, December 2021. Historians are studying what happened that day."],stamp:"Guilty ×2"},
- {kick:"Exhibit G · Spotlight",ava:"SN",avaBg:"#5aa9ff",name:"Sneha",title:"The Celebrity Who Won't Speak To Fans",acc:"#8b5cf6",cbg:"#e7f0ff",
-  chips:["mentioned 259 times","best ever: 30 words","≈1,620 words in 6 years"],
-  lines:["'Sneha' is the <b>most-mentioned name in the chat</b> — 259 times. The family cannot stop discussing her.",
+   "The archive contains exactly ONE real message from her: 151 words, December 2021. Historians are studying what happened that day."],stamp:"Guilty Ã—2"},
+ {kick:"Exhibit G Â· Spotlight",ava:"SN",avaBg:"#5aa9ff",name:"Sneha",title:"The Celebrity Who Won't Speak To Fans",acc:"#8b5cf6",cbg:"#e7f0ff",
+  chips:["mentioned 259 times","best ever: 30 words","â‰ˆ1,620 words in 6 years"],
+  lines:["'Sneha' is the <b>most-mentioned name in the chat</b> â€” 259 times. The family cannot stop discussing her.",
    "Her contribution to the discussion: 3.6 words per message, six-year personal best of <b>thirty words</b>.",
-   "Verified twice: her estimated lifetime output (~1,620 words) is <b>less than ONE Amma message</b> (1,949). One Amma paragraph outweighs Sneha's entire career. Case closed via mic drop."],stamp:"Guilty ×2"},
- {kick:"Exhibit H · Spotlight",ava:"GA",avaBg:"#42c98d",name:"Gayathri Akka",title:"Strictly Birthdays. By Appointment Only.",acc:"#12b5a0",cbg:"#e2f7f0",
-  chips:["🎂×110 🍫×107 💐×104","longest msg: 17 words","34 deleted 🤨"],
-  lines:["Top three emojis: cake, chocolate, bouquet. That is not a personality — that is a <b>greeting-card subscription service</b>.",
+   "Verified twice: her estimated lifetime output (~1,620 words) is <b>less than ONE Amma message</b> (1,949). One Amma paragraph outweighs Sneha's entire career. Case closed via mic drop."],stamp:"Guilty Ã—2"},
+ {kick:"Exhibit H Â· Spotlight",ava:"GA",avaBg:"#42c98d",name:"Gayathri Akka",title:"Strictly Birthdays. By Appointment Only.",acc:"#12b5a0",cbg:"#e2f7f0",
+  chips:["ðŸŽ‚Ã—110 ðŸ«Ã—107 ðŸ’Ã—104","longest msg: 17 words","34 deleted ðŸ¤¨"],
+  lines:["Top three emojis: cake, chocolate, bouquet. That is not a personality â€” that is a <b>greeting-card subscription service</b>.",
    "Longest message in six years: <b>seventeen words</b>. Appa deletes longer messages than she has ever written.",
-   "Yet she deleted 34 messages. What could a seventeen-word-maximum person need to unsay 34 times? The court demands answers. (Mercy clause: when she speaks, only 6.7% get ignored — lowest in the family. Scarcity is power.)"],stamp:"Guilty ×2"},
- {kick:"Exhibit I",ava:"?",avaBg:"#5aa9ff",name:"+91 87••• •••92",title:"The Unsaved Legend",acc:"#5aa9ff",cbg:"#e7f0ff",
+   "Yet she deleted 34 messages. What could a seventeen-word-maximum person need to unsay 34 times? The court demands answers. (Mercy clause: when she speaks, only 6.7% get ignored â€” lowest in the family. Scarcity is power.)"],stamp:"Guilty Ã—2"},
+ {kick:"Exhibit I",ava:"?",avaBg:"#5aa9ff",name:"+91 87â€¢â€¢â€¢ â€¢â€¢â€¢92",title:"The Unsaved Legend",acc:"#5aa9ff",cbg:"#e7f0ff",
   chips:["2,028 messages","6 years of service","saved by: nobody"],
   lines:["This number sent <b>2,028 messages</b>. It wished, blessed, forwarded, and laughed for six straight years.",
    "In those six years, not one family member spent the four seconds required to save the contact. Everyone knows who it is. Nobody will commit.",
-   "Then, in 2025 — silence. Vanished. Honorable mention to the other number that appeared for 4 days in 2021, dumped 160 photos, and left forever."],stamp:"Guilty"},
- {kick:"Exhibit J",ava:"🐢",avaBg:"#7a7090",name:"The Slowpokes",title:"Krishna Attimber · Priya Manni · Aditya Anna",acc:"#7a7090",cbg:"#fff1cc",
-  chips:["Krishna: 13m 34s replies","Priya: 58 voice notes 🎙️","Aditya: 295 msgs, nicest 😇"],
+   "Then, in 2025 â€” silence. Vanished. Honorable mention to the other number that appeared for 4 days in 2021, dumped 160 photos, and left forever."],stamp:"Guilty"},
+ {kick:"Exhibit J",ava:"ðŸ¢",avaBg:"#7a7090",name:"The Slowpokes",title:"Krishna Attimber Â· Priya Manni Â· Aditya Anna",acc:"#7a7090",cbg:"#fff1cc",
+  chips:["Krishna: 13m 34s replies","Priya: 58 voice notes ðŸŽ™ï¸","Aditya: 295 msgs, nicest ðŸ˜‡"],
   lines:["Krishna Attimber's median reply time is <b>thirteen and a half minutes</b>. He responds to 'good morning' when it is no longer morning.",
    "Priya Manni filed 58 voice notes, because typing is for other people. The court has not transcribed them and never will.",
    "And Aditya Anna: 295 messages in six years, yet the <b>highest positivity score</b> in the family. Appears monthly, blesses everyone, vanishes like a monsoon cloud. Suspiciously nice."],stamp:"Guilty"},
- {kick:"Closing arguments",ava:"💛",avaBg:"#12b5a0",name:"The Verdict",title:"Six years of evidence, summarized",acc:"#12b5a0",cbg:"#e2f7f0",
-  chips:["90% positive","'happy' ×1,265","142 silent days out of 2,099"],
+ {kick:"Closing arguments",ava:"ðŸ’›",avaBg:"#12b5a0",name:"The Verdict",title:"Six years of evidence, summarized",acc:"#12b5a0",cbg:"#e2f7f0",
+  chips:["90% positive","'happy' Ã—1,265","142 silent days out of 2,099"],
   lines:["Having reviewed 27,651 messages, the court finds this family guilty of relentless birthday wishes, aggressive blessings, and industrial-scale emoji deployment.",
    "Ninety percent of everything said is positive. The most common word in six years is <b>'happy'</b>.",
-   "The sentence: continue exactly as you are. Case dismissed. 🎉"],stamp:"Guilty of being wholesome",green:true,finale:true},
+   "The sentence: continue exactly as you are. Case dismissed. ðŸŽ‰"],stamp:"Guilty of being wholesome",green:true,finale:true},
 ];
 
 let idx=0;
@@ -180,7 +181,7 @@ function render(){
   document.getElementById("counter").textContent=`Act ${idx+1} of ${ACTS.length}`;
   document.getElementById("prev").disabled=idx===0;
   const nxt=document.getElementById("next");
-  nxt.textContent=idx===0?"Begin the trial 🔨":(idx===ACTS.length-1?"Encore? Start over ↺":"Next exhibit →");
+  nxt.textContent=idx===0?"Begin the trial ðŸ”¨":(idx===ACTS.length-1?"Encore? Start over â†º":"Next exhibit â†’");
   document.querySelectorAll(".dot").forEach((d,i)=>d.classList.toggle("on",i===idx));
   const lineDelay=.75, chipStep=.14;
   let confetti="";
