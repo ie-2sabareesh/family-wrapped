@@ -97,6 +97,34 @@ section{margin-top:100px;position:relative}
 .fcase .wordbits span{font-size:12px;font-weight:800;padding:4px 12px;border-radius:99px;background:var(--sun-bg);font-style:italic}
 .pull{font-family:var(--display);font-weight:600;font-size:clamp(21px,4.6vw,29px);line-height:1.35;text-align:center;margin:60px auto 0;max-width:26ch}
 .pull b{color:var(--teal)}
+/* committee memos */
+.memo{background:var(--white);border:2px solid var(--card-border);border-radius:26px;margin-top:26px;
+  box-shadow:var(--shadow);position:relative;overflow:hidden;
+  transition:transform .35s cubic-bezier(.2,1.3,.4,1),box-shadow .35s ease}
+.memo:hover{transform:translateY(-6px) rotate(-.5deg);box-shadow:0 20px 48px #33294a22}
+.memo.vip{border:3px solid var(--mc,var(--coral))}
+.memo-head{display:flex;align-items:center;gap:13px;padding:20px 24px 14px;
+  border-bottom:2px dashed #33294a1a}
+.memo-head .mini-ava{width:46px;height:46px;border-radius:16px;font-size:15px}
+.memo-head .who b{font-family:var(--display);font-weight:700;font-size:19px;display:block;line-height:1.2}
+.memo-head .who small{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.memo-body{padding:16px 24px 22px}
+.memo-body p{font-size:14.5px;color:#554d6e;margin-top:9px}
+.memo-body p b{color:var(--ink)}
+.memo-body .lbl{font-family:var(--display);font-weight:600;font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--mc,var(--coral));display:block;margin-top:14px}
+.memo-body .lbl:first-child{margin-top:0}
+.kpi{display:inline-block;margin-top:14px;font-size:12.5px;font-weight:800;padding:7px 15px;
+  border-radius:99px;background:var(--sun-bg);border:2px dashed #c98f0055}
+.prio{position:absolute;top:16px;right:-38px;transform:rotate(38deg);background:var(--mc,var(--coral));
+  color:#fff;font-family:var(--display);font-weight:600;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;padding:5px 42px;animation:prioPulse 2.4s ease-in-out infinite}
+@keyframes prioPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.18)}}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px;align-items:start}
+.memo-grid .memo{margin-top:16px}
+@media(max-width:620px){.memo-grid{grid-template-columns:1fr}}
+.memo-sign{margin-top:34px;text-align:center;font-size:14px;color:var(--soft);font-weight:700;font-style:italic}
+.memo-sign b{font-family:var(--display);font-style:normal;color:var(--ink)}
 .foot{margin-top:100px;text-align:center;color:var(--soft);font-size:13px;line-height:2;font-weight:600}
 .foot a{color:var(--teal);font-weight:800}
 @media(max-width:560px){.guards{grid-template-columns:1fr}}
@@ -220,6 +248,167 @@ section{margin-top:100px;position:relative}
         for an empty theatre. Respect.</p>
       <div class="wordbits"><span>solo artist: Appa</span><span>audience: asleep</span></div>
     </div>
+  </section>
+
+  <!-- RECOMMENDATIONS -->
+  <section id="recommendations">
+    <span class="kicker coralk rv">Official memo</span>
+    <h2 class="rv">The Committee's recommendations 📋</h2>
+    <p class="dek rv">Based on six years of peer-reviewed evidence, the Office of Family Analytics
+      hereby issues the following personal development plans. Participation is, of course,
+      entirely voluntary. Like it always has been. We've noticed.</p>
+
+    <!-- The featured three -->
+    <div class="memo vip rv" style="--mc:var(--pink)">
+      <div class="prio">Urgent</div>
+      <div class="memo-head"><div class="mini-ava" style="background:#ff8fa3">LK</div>
+        <div class="who"><b>Lakshmi</b><small>Memo 01 · Dept. of Wasted Potential</small></div></div>
+      <div class="memo-body">
+        <span class="lbl">Finding</span>
+        <p>Replies in <b>58 seconds</b> — fastest in the family — yet averages <b>3.6 words</b>.
+          The hardware is clearly excellent. The content pipeline appears to be down.</p>
+        <span class="lbl">Recommendation</span>
+        <p>Since typing speed is demonstrably not the barrier, the Committee gently suggests
+          attempting a <b>second sentence</b>. Not today, obviously. Whenever you're free.
+          We know you're busy. Everyone's busy. Somehow Amma is also busy and manages 31 words.</p>
+        <span class="kpi">🎯 KPI: one message longer than 10 words per quarter. Baby steps.</span>
+      </div>
+    </div>
+
+    <div class="memo vip rv" style="--mc:var(--sky)">
+      <div class="prio">Urgent</div>
+      <div class="memo-head"><div class="mini-ava" style="background:#5aa9ff">SN</div>
+        <div class="who"><b>Sneha</b><small>Memo 02 · Dept. of Celebrity Relations</small></div></div>
+      <div class="memo-body">
+        <span class="lbl">Finding</span>
+        <p>Most-mentioned person in the chat (<b>259 times</b>). Estimated lifetime word output:
+          ~1,620 — which is, and we double-checked this, <b>less than one (1) Amma message</b>.</p>
+        <span class="lbl">Recommendation</span>
+        <p>The family runs your fan club faithfully; consider attending a meeting. Even actual
+          celebrities do a press conference now and then. To beat one Amma paragraph by 2032
+          you'd need just <b>27 words a month</b>. We believe in you. Statistically we shouldn't, but we do.</p>
+        <span class="kpi">🎯 KPI: break your six-year record of 30 words. Aim for 31. Dream big.</span>
+      </div>
+    </div>
+
+    <div class="memo vip rv" style="--mc:var(--teal)">
+      <div class="prio">Urgent</div>
+      <div class="memo-head"><div class="mini-ava" style="background:#42c98d">GA</div>
+        <div class="who"><b>Gayathri Akka</b><small>Memo 03 · Dept. of Calendar Affairs</small></div></div>
+      <div class="memo-body">
+        <span class="lbl">Finding</span>
+        <p>Communication triggered exclusively by birthdays (🎂×110, 🍫×107, 💐×104).
+          Longest message in six years: <b>17 words</b>. Deleted messages: <b>34</b>. The math is upsetting.</p>
+        <span class="lbl">Recommendation</span>
+        <p>The Committee is pleased to inform you that the group chat also functions on the
+          other <b>~350 days of the year</b>. No birthday required. Entry is free. Additionally,
+          a written statement regarding how a 17-word-maximum author accumulated 34 deletions
+          would be welcomed, at your convenience, which we understand is April.</p>
+        <span class="kpi">🎯 KPI: one (1) message containing zero cake-related emojis.</span>
+      </div>
+    </div>
+
+    <!-- everyone else -->
+    <div class="memo-grid">
+      <div class="memo rv" style="--mc:#c98f00">
+        <div class="memo-head"><div class="mini-ava" style="background:#ffb800">AP</div>
+          <div class="who"><b>Appa</b><small>Memo 04 · Night Shift Division</small></div></div>
+        <div class="memo-body">
+          <p>The 3 AM content is appreciated by the entire audience of zero people who are awake.
+            The Committee suggests <b>scheduled send</b> — the news will still be news at 8.
+            The 198 deleted messages have been noted. Not investigated. Just… noted. Forever.</p>
+          <span class="kpi">🎯 KPI: no broadcasts between 1 AM and 6 AM. We know. We're sorry.</span>
+        </div>
+      </div>
+
+      <div class="memo rv" style="--mc:var(--teal)">
+        <div class="memo-head"><div class="mini-ava" style="background:#12b5a0">MA</div>
+          <div class="who"><b>Mani Anna</b><small>Memo 05 · Dept. of Self-Amusement</small></div></div>
+        <div class="memo-body">
+          <p>1,326 uses of 😂, a measurable fraction at his own jokes. The 2,073-word message of
+            December 2023 remains unread by all recipients; the Committee recommends attaching a
+            <b>summary</b> next time. Or an audiobook. Otherwise: attendance record immaculate.
+            Never change. (Please change slightly.)</p>
+          <span class="kpi">🎯 KPI: TL;DR required above 500 words.</span>
+        </div>
+      </div>
+
+      <div class="memo rv" style="--mc:var(--grape)">
+        <div class="memo-head"><div class="mini-ava" style="background:#8b5cf6">AM</div>
+          <div class="who"><b>Amma</b><small>Memo 06 · Publishing House</small></div></div>
+        <div class="memo-body">
+          <p>31.4 words per message is not texting, it is <b>serialized literature</b>, and frankly
+            the Committee is a fan. However, out of concern for the family's scroll fingers,
+            we recommend exploring an exciting new technology called <b>bullet points</b>.
+            Chapters optional but encouraged.</p>
+          <span class="kpi">🎯 KPI: keep writing. Someone in this family has to.</span>
+        </div>
+      </div>
+
+      <div class="memo rv" style="--mc:var(--coral)">
+        <div class="memo-head"><div class="mini-ava" style="background:#ff6f61">SK</div>
+          <div class="who"><b>Sabareesh</b><small>Memo 07 · Morale Department (vacant)</small></div></div>
+        <div class="memo-body">
+          <p>Online 24/7, replies in 69 seconds, and yet holds the <b>lowest positivity score
+            ever recorded</b> by this office. The Committee recommends redirecting some of that
+            impressive availability toward, and we quote the data, "being nice."
+            He also built this website, which explains a lot about this memo's tone.</p>
+          <span class="kpi">🎯 KPI: one unprompted "happy" per week. Sundays count.</span>
+        </div>
+      </div>
+
+      <div class="memo rv" style="--mc:#e07b39">
+        <div class="memo-head"><div class="mini-ava" style="background:#f59e5b">RA</div>
+          <div class="who"><b>Ram Attimber</b><small>Memo 08 · 4 AM News Bureau</small></div></div>
+        <div class="memo-body">
+          <p>Impressive velocity: joined 2024, #1 by 2025. However, <b>36.6% of bulletins go
+            unanswered</b>, possibly because they are filed before the sun. The Committee
+            recommends holding the morning edition until an hour when subscribers possess
+            consciousness. Circulation should improve immediately.</p>
+          <span class="kpi">🎯 KPI: first bulletin after 7 AM. The news can nap.</span>
+        </div>
+      </div>
+
+      <div class="memo rv" style="--mc:#7a7090">
+        <div class="memo-head"><div class="mini-ava" style="background:#7a7090">🐢</div>
+          <div class="who"><b>Krishna &amp; Priya</b><small>Memo 09 · Slow Communications Wing</small></div></div>
+        <div class="memo-body">
+          <p>Krishna Attimber: median reply time <b>13m 34s</b> — kindly reply before the topic
+            changes; the family is aging. Priya Manni: 58 voice notes and counting — the Committee
+            respectfully requests a <b>text edition</b>, as we listen to everything at 2× anyway
+            and it changes the emotional impact.</p>
+          <span class="kpi">🎯 KPI: Krishna under 5 minutes. Priya: one typed sentence per voice note.</span>
+        </div>
+      </div>
+
+      <div class="memo rv" style="--mc:var(--sky)">
+        <div class="memo-head"><div class="mini-ava" style="background:#5aa9ff">?</div>
+          <div class="who"><b>The Entire Family</b><small>Memo 10 · re: the Unsaved Number</small></div></div>
+        <div class="memo-body">
+          <p>A certain number has served this family faithfully for six years and 2,028 messages.
+            Saving a contact takes <b>four seconds</b>. The Committee has calculated that the family
+            has collectively had <b>189 million seconds</b> to do this. We're not angry.
+            We're just running the numbers.</p>
+          <span class="kpi">🎯 KPI: someone. anyone. today.</span>
+        </div>
+      </div>
+
+      <div class="memo rv" style="--mc:var(--teal)">
+        <div class="memo-head"><div class="mini-ava" style="background:#12b5a0">💛</div>
+          <div class="who"><b>Aditya Anna</b><small>Memo 11 · Dept. of Suspicious Excellence</small></div></div>
+        <div class="memo-body">
+          <p>295 messages in six years, yet the <b>highest positivity score in the family</b>.
+            Appears monthly, blesses everyone, disappears. The Committee has no complaints and
+            finds this deeply unsettling. Recommendation: teach a workshop. Mandatory attendance
+            for Memo 07.</p>
+          <span class="kpi">🎯 KPI: keep doing whatever this is.</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="memo-sign rv">Signed, <b>The Office of Family Analytics 🤖</b><br>
+      These recommendations are non-binding, lovingly generated, and statistically unimpeachable.<br>
+      Appeals may be filed in the group chat, where they will be left on read with a 36.6% probability.</p>
   </section>
 
   <p class="foot">Part of <a href="index.html">Andhra Kaara — Wrapped &amp; Roasted</a> ·
